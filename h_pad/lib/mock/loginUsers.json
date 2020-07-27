@@ -1,0 +1,44 @@
+[
+  {
+    "login": "admin",
+    "password": "123456",
+    "isAdmin": 1,
+    "userId": 1
+  },
+  {
+    "login": "user",
+    "password": "123456",
+    "isAdmin": 1,
+    "userId": 1
+  },
+  {
+    "login": "test",
+    "password": "123456",
+    "isAdmin": 1,
+    "userId": 1
+  },
+    {
+      "login": "test1",
+      "password": "123456",
+      "isAdmin": 1,
+      "userId": 1
+    },
+    {
+      "login": "test2",
+      "password": "123456",
+      "isAdmin": 1,
+      "userId": 1
+    },
+    {
+      "login": "test3",
+      "password": "123456",
+      "isAdmin": 1,
+      "userId": 1
+    },
+    {
+      "login": "test4",
+      "password": "123456",
+      "isAdmin": 1,
+      "userId": 1
+    }
+]

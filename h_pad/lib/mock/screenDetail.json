@@ -1,0 +1,110 @@
+{
+    "deviceId": 0,
+    "screenId": 0,
+    "mayUse": 0,
+    "general": {
+        "name": "屏幕Wahaha"
+    },
+    "outputMode": {
+        "mosaic": {
+            "row": 2,
+            "column": 1
+        },
+        "size": {
+            "width": 1920,
+            "height": 1080,
+            "x": 1920,
+            "y": 1080
+        },
+        "screenInterfaces": [{
+            "connectCapacity": 0,
+            "cropx": 0,
+            "cropy": 0,
+            "dotpitch": 2,
+            "height": 1080,
+            "interfaceId": 0,
+            "interfaceType": 4,
+            "isCardOnline": 1,
+            "modelId": 31553,
+            "outputId": 0,
+            "outputName": "output 11-1",
+            "slotId": 10,
+            "width": 1920,
+            "x": 1005,
+            "y": 1005
+        }]
+    },
+    "testPattern": {
+        "testPattern": 0,
+        "bright": 0,
+        "grid": 0,
+        "speed": 0
+    },
+    "imageQuality": {
+        "contrast": {
+            "all": 50,
+            "R": 50,
+            "G": 50,
+            "B": 50
+        },
+        "brightness": {
+            "all": 50,
+            "R": 50,
+            "G": 50,
+            "B": 50
+        },
+        "hue": 0,
+        "saturation": 50
+    },
+    "gamma": 1,
+    "screenLayers": [{
+        "general": {
+            "layerId": 1,
+            "name": "Layer1",
+            "sizeType": 0,
+            "type": 0,
+            "zorder": 1,
+            "isBackground": false,
+            "isFreeze": false,
+            "flipType": 1
+        },
+        "window": {
+            "width": 100,
+            "height": 100,
+            "x": 100,
+            "y": 100
+        },
+        "source": {
+            "sourceType": 0,
+            "inputId": 0,
+            "cropId": 255,
+            "name": "输入源1"
+        },
+        "lock": {
+            "lock": 0
+        }
+    }],
+    "Freeze": {
+        "enable": 0
+    },
+    "Ftb": {
+        "enable": 0
+    },
+    "Bkg": {
+        "enable": 0,
+        "bkgId": 1,
+        "imgUrl": ""
+    },
+    "Lock": {
+        "enable": 0
+    },
+    "Osd": {},
+    "readtimeDisplay": {
+        "enable": 0
+    },
+    "screenBrightness": 90,
+    "presetPoll": {
+        "enable": 0,
+        "presetGroupId": 0
+    }
+}

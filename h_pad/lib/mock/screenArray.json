@@ -1,0 +1,525 @@
+[{
+  "Bkg": {
+    "bkgId": 0,
+    "enable": 0,
+    "imgUrl": ""
+  },
+  "Freeze": {
+    "enable": 0
+  },
+  "Ftb": {
+    "enable": 1
+  },
+  "Osd": {
+    "enable": 1,
+    "height": 1080,
+    "image": {
+      "file": {
+        "fileLength": 4096,
+        "fileName": "xxx",
+        "hashSum": 0,
+        "height": 0,
+        "width": 0
+      },
+      "opacity": 100
+    },
+    "isJudge": 0,
+    "type": 0,
+    "width": 1920,
+    "words": {
+      "backgroundColor": {
+        "A": 50,
+        "B": 50,
+        "G": 50,
+        "R": 50
+      },
+      "backgroundEnable": 1,
+      "backgroundImage": {
+        "file": {
+          "fileLength": 4096,
+          "fileName": "xxx",
+          "hashSum": 0,
+          "height": 0,
+          "width": 0
+        },
+        "opacity": 100
+      },
+      "backgroundType": 0,
+      "chars": "aaaaaaaaaabbbbbbbbbcccccccccccccddddddddddddeeeeeeeeeeeffffffffffffffffffgggggggggggghhhhhhhhiiiiiiiiiiiiiijjjjjjjjjjjjjjjkkkkkkkkkkkkkkkkkkkkkkllllllllllllllllllllllmmmmmmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnn",
+      "direction": 0,
+      "font": 0,
+      "fontColor": {
+        "A": 100,
+        "B": 0,
+        "G": 0,
+        "R": 255
+      },
+      "fontPercent": 80,
+      "speed": 5
+    },
+    "x": 1005,
+    "y": 1005
+  },
+  "brightness": 100,
+  "deviceId": 0,
+  "gamma": 1,
+  "general": {
+    "createTime": "1582279366.404576",
+    "name": "Screen 1"
+  },
+  "imageQuality": {
+    "brightness": {
+      "B": 50,
+      "G": 50,
+      "R": 50,
+      "all": 50
+    },
+    "contrast": {
+      "B": 50,
+      "G": 50,
+      "R": 50,
+      "all": 50
+    },
+    "hue": 0,
+    "saturation": 50
+  },
+  "mayUse": 1,
+  "outputMode": {
+    "mosaic": {
+      "column": 2,
+      "row": 2
+    },
+    "screenInterfaces": [{
+      "connectCapacity": 0,
+      "cropx": 0,
+      "cropy": 0,
+      "dotpitch": 2,
+      "height": 1080,
+      "interfaceId": 0,
+      "interfaceType": -1,
+      "isCardOnline": 255,
+      "modelId": 29953,
+      "outputId": 255,
+      "outputName": "",
+      "slotId": 255,
+      "width": 1920,
+      "x": 1005,
+      "y": 1005
+    }, {
+      "connectCapacity": 0,
+      "cropx": 0,
+      "cropy": 0,
+      "dotpitch": 2,
+      "height": 1080,
+      "interfaceId": 1,
+      "interfaceType": -1,
+      "isCardOnline": 255,
+      "modelId": 29953,
+      "outputId": 255,
+      "outputName": "",
+      "slotId": 255,
+      "width": 1920,
+      "x": 2925,
+      "y": 1005
+    }, {
+      "connectCapacity": 0,
+      "cropx": 0,
+      "cropy": 0,
+      "dotpitch": 2,
+      "height": 1080,
+      "interfaceId": 2,
+      "interfaceType": -1,
+      "isCardOnline": 255,
+      "modelId": 29953,
+      "outputId": 255,
+      "outputName": "",
+      "slotId": 255,
+      "width": 1920,
+      "x": 1005,
+      "y": 2085
+    }, {
+      "connectCapacity": 0,
+      "cropx": 0,
+      "cropy": 0,
+      "dotpitch": 2,
+      "height": 1080,
+      "interfaceId": 3,
+      "interfaceType": -1,
+      "isCardOnline": 255,
+      "modelId": 29953,
+      "outputId": 255,
+      "outputName": "",
+      "slotId": 255,
+      "width": 1920,
+      "x": 2925,
+      "y": 2085
+    }],
+    "size": {
+      "height": 2160,
+      "width": 3840,
+      "x": 1005,
+      "y": 1005
+    }
+  },
+  "presetPoll": {
+    "enable": 0,
+    "presetGroupId": 0
+  },
+  "screenBrightness": 30,
+  "screenId": 0,
+  "screenLayers": [{
+    "deviceId": 0,
+    "general": {
+      "flipType": 0,
+      "isBackground": false,
+      "isFreeze": false,
+      "layerId": 0,
+      "name": "图层1",
+      "sizeType": 0,
+      "type": 0,
+      "zorder": 0
+    },
+    "layerId": 0,
+    "lock": {
+      "lock": 0
+    },
+    "screenId": 0,
+    "source": {
+      "connectCapacity": 0,
+      "cropId": 255,
+      "inputId": 0,
+      "interfaceType": 4,
+      "modelId": 31488,
+      "name": "",
+      "sourceType": 0
+    },
+    "window": {
+      "height": 1080,
+      "width": 1920,
+      "x": 1005,
+      "y": 1005
+    }
+  }, {
+    "deviceId": 0,
+    "general": {
+      "flipType": 0,
+      "isBackground": false,
+      "isFreeze": false,
+      "layerId": 1,
+      "name": "图层2",
+      "sizeType": 0,
+      "type": 0,
+      "zorder": 1
+    },
+    "layerId": 1,
+    "lock": {
+      "lock": 0
+    },
+    "screenId": 0,
+    "source": {
+      "connectCapacity": 0,
+      "cropId": 255,
+      "inputId": 1,
+      "interfaceType": 5,
+      "modelId": 31488,
+      "name": "",
+      "sourceType": 0
+    },
+    "window": {
+      "height": 1080,
+      "width": 1920,
+      "x": 2925,
+      "y": 1005
+    }
+  }, {
+    "deviceId": 0,
+    "general": {
+      "flipType": 0,
+      "isBackground": false,
+      "isFreeze": false,
+      "layerId": 2,
+      "name": "图层3",
+      "sizeType": 0,
+      "type": 0,
+      "zorder": 2
+    },
+    "layerId": 2,
+    "lock": {
+      "lock": 0
+    },
+    "screenId": 0,
+    "source": {
+      "connectCapacity": 0,
+      "cropId": 255,
+      "inputId": 2,
+      "interfaceType": 4,
+      "modelId": 31488,
+      "name": "",
+      "sourceType": 0
+    },
+    "window": {
+      "height": 1080,
+      "width": 1920,
+      "x": 1005,
+      "y": 2085
+    }
+  }, {
+    "deviceId": 0,
+    "general": {
+      "flipType": 0,
+      "isBackground": false,
+      "isFreeze": false,
+      "layerId": 3,
+      "name": "图层4",
+      "sizeType": 0,
+      "type": 0,
+      "zorder": 3
+    },
+    "layerId": 3,
+    "lock": {
+      "lock": 0
+    },
+    "screenId": 0,
+    "source": {
+      "connectCapacity": 0,
+      "cropId": 255,
+      "inputId": 3,
+      "interfaceType": 5,
+      "modelId": 31488,
+      "name": "",
+      "sourceType": 0
+    },
+    "window": {
+      "height": 1080,
+      "width": 1920,
+      "x": 2925,
+      "y": 2085
+    }
+  }],
+  "switchEffect": {
+    "PlayPGMIndex": 0,
+    "effectType": 0,
+    "switchEffect": 0,
+    "timeline": 4
+  },
+  "testPattern": {
+    "bright": 2,
+    "grid": 3,
+    "speed": 2,
+    "testPattern": 65535
+  }
+}, {
+  "Bkg": {
+    "bkgId": 0,
+    "enable": 0,
+    "imgUrl": ""
+  },
+  "Freeze": {
+    "enable": 0
+  },
+  "Ftb": {
+    "enable": 1
+  },
+  "Osd": {
+    "enable": 0,
+    "height": 300,
+    "image": {
+      "file": {
+        "fileLength": 4096,
+        "fileName": "xxx",
+        "hashSum": 0,
+        "height": 0,
+        "width": 0
+      },
+      "opacity": 100
+    },
+    "isJudge": 0,
+    "type": 0,
+    "width": 1920,
+    "words": {
+      "backgroundColor": {
+        "A": 50,
+        "B": 50,
+        "G": 50,
+        "R": 50
+      },
+      "backgroundEnable": 1,
+      "backgroundImage": {
+        "file": {
+          "fileLength": 4096,
+          "fileName": "xxx",
+          "hashSum": 0,
+          "height": 0,
+          "width": 0
+        },
+        "opacity": 100
+      },
+      "backgroundType": 0,
+      "chars": "Welcome",
+      "direction": 0,
+      "font": 0,
+      "fontColor": {
+        "A": 100,
+        "B": 0,
+        "G": 0,
+        "R": 255
+      },
+      "fontPercent": 80,
+      "speed": 5
+    },
+    "x": 1005,
+    "y": 1005
+  },
+  "brightness": 100,
+  "deviceId": 0,
+  "gamma": 1,
+  "general": {
+    "createTime": "1582787503.1831052",
+    "name": "屏幕 1"
+  },
+  "imageQuality": {
+    "brightness": {
+      "B": 50,
+      "G": 50,
+      "R": 50,
+      "all": 50
+    },
+    "contrast": {
+      "B": 50,
+      "G": 50,
+      "R": 50,
+      "all": 50
+    },
+    "hue": 0,
+    "saturation": 50
+  },
+  "mayUse": 1,
+  "outputMode": {
+    "mosaic": {
+      "column": 2,
+      "row": 2
+    },
+    "screenInterfaces": [{
+      "connectCapacity": 0,
+      "cropx": 0,
+      "cropy": 0,
+      "dotpitch": 2,
+      "height": 1080,
+      "interfaceId": 0,
+      "interfaceType": -1,
+      "isCardOnline": 255,
+      "modelId": 29953,
+      "outputId": 255,
+      "outputName": "",
+      "slotId": 255,
+      "width": 1920,
+      "x": 1005,
+      "y": 1005
+    }, {
+      "connectCapacity": 0,
+      "cropx": 0,
+      "cropy": 0,
+      "dotpitch": 2,
+      "height": 1080,
+      "interfaceId": 1,
+      "interfaceType": -1,
+      "isCardOnline": 255,
+      "modelId": 29953,
+      "outputId": 255,
+      "outputName": "",
+      "slotId": 255,
+      "width": 1920,
+      "x": 2925,
+      "y": 1005
+    }, {
+      "connectCapacity": 0,
+      "cropx": 0,
+      "cropy": 0,
+      "dotpitch": 2,
+      "height": 1080,
+      "interfaceId": 2,
+      "interfaceType": -1,
+      "isCardOnline": 255,
+      "modelId": 29953,
+      "outputId": 255,
+      "outputName": "",
+      "slotId": 255,
+      "width": 1920,
+      "x": 1005,
+      "y": 2085
+    }, {
+      "connectCapacity": 0,
+      "cropx": 0,
+      "cropy": 0,
+      "dotpitch": 2,
+      "height": 1080,
+      "interfaceId": 3,
+      "interfaceType": -1,
+      "isCardOnline": 255,
+      "modelId": 29953,
+      "outputId": 255,
+      "outputName": "",
+      "slotId": 255,
+      "width": 1920,
+      "x": 2925,
+      "y": 2085
+    }],
+    "size": {
+      "height": 2160,
+      "width": 3840,
+      "x": 1005,
+      "y": 1005
+    }
+  },
+  "presetPoll": {
+    "enable": 0,
+    "presetGroupId": 0
+  },
+  "screenBrightness": 20,
+  "screenId": 1,
+  "screenLayers": [{
+    "deviceId": 0,
+    "general": {
+      "flipType": 0,
+      "isBackground": false,
+      "isFreeze": false,
+      "layerId": 0,
+      "name": "layer1",
+      "sizeType": 0,
+      "type": 1,
+      "zorder": 0
+    },
+    "layerId": 0,
+    "lock": {
+      "lock": 0
+    },
+    "screenId": 1,
+    "source": {
+      "connectCapacity": 0,
+      "cropId": 255,
+      "inputId": 27,
+      "interfaceType": 3,
+      "modelId": 31488,
+      "name": "input 7-4",
+      "sourceType": 1
+    },
+    "window": {
+      "height": 540,
+      "width": 960,
+      "x": 1984,
+      "y": 1856
+    }
+  }],
+  "switchEffect": {
+    "PlayPGMIndex": 1,
+    "effectType": 0,
+    "switchEffect": 0,
+    "timeline": 4
+  },
+  "testPattern": {
+    "bright": 2,
+    "grid": 3,
+    "speed": 2,
+    "testPattern": 65535
+  }
+}]
