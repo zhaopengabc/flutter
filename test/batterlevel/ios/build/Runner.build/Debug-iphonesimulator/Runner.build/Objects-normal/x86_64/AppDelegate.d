@@ -1,0 +1,25 @@
+dependencies: \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Runner/AppDelegate.m \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Runner/AppDelegate.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Modules/module.modulemap \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterTexture.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterPlugin.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterEngine.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterDartProject.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterBinaryMessenger.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterViewController.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterPluginAppLifeCycleDelegate.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterPlatformViews.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterHeadlessDartRunner.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterChannels.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterCallbackCache.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterCodecs.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterMacros.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/FlutterAppDelegate.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Flutter/Flutter.framework/Headers/Flutter.h \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Pods/Headers/Public/shared_preferences/shared_preferences.modulemap \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Pods/Headers/Public/orientation/orientation.modulemap \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Pods/Headers/Public/image_picker/image_picker.modulemap \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Pods/Headers/Public/device_info/device_info.modulemap \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Pods/Headers/Public/connectivity/connectivity.modulemap \
+  /Users/zhaopeng/Desktop/nova/decode/flutter/test/batterlevel/ios/Runner/GeneratedPluginRegistrant.h

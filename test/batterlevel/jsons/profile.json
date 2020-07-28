@@ -1,0 +1,21 @@
+{
+  "user": "$user",
+  "login": "admin",
+  "password": "admin",
+  "deviceId": 0,
+  "theme": 5678,
+  "themeIndex": 1,
+  "screenType": "Horizontal",
+  "cache": "$cacheConfig",
+  "lastLogin": "",
+  "locale": "zh",
+  "userNames": [
+    "$user"
+  ],
+  "firstLoad": true,
+  "ip": "",
+  "sn": "",
+  "mac": "",
+  "mainModelId": 29963,
+  "isVideoClosed": false
+}

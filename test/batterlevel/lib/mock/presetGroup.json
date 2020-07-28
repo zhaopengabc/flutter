@@ -1,0 +1,596 @@
+[
+    {
+        "deviceId": 0,
+        "name": "场景轮巡1",
+        "presetGroupId": 0,
+        "presets": [
+            {
+                "deviceId": 0,
+                "layers": [
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 0,
+                            "name": "图层1",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 0
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 13,
+                            "modelId": 31493,
+                            "name": "input 6-1",
+                            "sourceType": 0
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1005,
+                            "y": 1005
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 1,
+                            "name": "图层2",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 1
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 2925,
+                            "y": 1005
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 2,
+                            "name": "图层3",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 2
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 3,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 0
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1005,
+                            "y": 2085
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 3,
+                            "name": "图层4",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 3
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 2925,
+                            "y": 2085
+                        }
+                    }
+                ],
+                "name": "场景1",
+                "presetId": 0,
+                "screenId": 1,
+                "zorder": 1
+            },
+            {
+                "deviceId": 0,
+                "layers": [
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 1,
+                            "name": "图层2",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 0
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1078,
+                            "y": 1234
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 2,
+                            "name": "图层3",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 1
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 3,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 0
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1005,
+                            "y": 2085
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 3,
+                            "name": "图层4",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 2
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 2925,
+                            "y": 2085
+                        }
+                    }
+                ],
+                "name": "场景2",
+                "presetId": 1,
+                "screenId": 1,
+                "zorder": 2
+            },
+            {
+                "deviceId": 0,
+                "layers": [
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 1,
+                            "name": "图层2",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 0
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1027,
+                            "y": 1331
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 2,
+                            "name": "图层3",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 1
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 3,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 0
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 988,
+                            "y": 1687
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 3,
+                            "name": "图层4",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 2
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 2925,
+                            "y": 2085
+                        }
+                    }
+                ],
+                "name": "场景3",
+                "presetId": 2,
+                "screenId": 1,
+                "zorder": 3
+            }
+        ],
+        "screenId": 1,
+        "time": 10
+    },
+    {
+        "deviceId": 0,
+        "name": "场景轮巡2",
+        "presetGroupId": 1,
+        "presets": [
+            {
+                "deviceId": 0,
+                "layers": [
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 1,
+                            "name": "图层2",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 0
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1027,
+                            "y": 1331
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 2,
+                            "name": "图层3",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 1
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 3,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 0
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 988,
+                            "y": 1687
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 3,
+                            "name": "图层4",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 2
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 2925,
+                            "y": 2085
+                        }
+                    }
+                ],
+                "name": "场景3",
+                "presetId": 2,
+                "screenId": 1,
+                "zorder": 1
+            },
+            {
+                "deviceId": 0,
+                "layers": [
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 1,
+                            "name": "图层2",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 0
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1078,
+                            "y": 1234
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 2,
+                            "name": "图层3",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 1
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 3,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 0
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1005,
+                            "y": 2085
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 3,
+                            "name": "图层4",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 2
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 2925,
+                            "y": 2085
+                        }
+                    }
+                ],
+                "name": "场景2",
+                "presetId": 1,
+                "screenId": 1,
+                "zorder": 2
+            }
+        ],
+        "screenId": 1,
+        "time": 10
+    },
+    {
+        "deviceId": 0,
+        "name": "场景轮巡3",
+        "presetGroupId": 2,
+        "presets": [
+            {
+                "deviceId": 0,
+                "layers": [
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 1,
+                            "name": "图层2",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 0
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1078,
+                            "y": 1234
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 2,
+                            "name": "图层3",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 1
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 3,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 0
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 1005,
+                            "y": 2085
+                        }
+                    },
+                    {
+                        "general": {
+                            "flipType": 0,
+                            "isBackground": false,
+                            "isFreeze": false,
+                            "layerId": 3,
+                            "name": "图层4",
+                            "sizeType": 0,
+                            "type": 0,
+                            "zorder": 2
+                        },
+                        "source": {
+                            "connectCapacity": 0,
+                            "cropId": 255,
+                            "inputId": 20,
+                            "interfaceType": 2,
+                            "modelId": 31488,
+                            "name": "input 6-1",
+                            "sourceType": 1
+                        },
+                        "window": {
+                            "height": 1080,
+                            "width": 1920,
+                            "x": 2925,
+                            "y": 2085
+                        }
+                    }
+                ],
+                "name": "场景2",
+                "presetId": 1,
+                "screenId": 1,
+                "zorder": 1
+            }
+        ],
+        "screenId": 1,
+        "time": 10
+    }
+]

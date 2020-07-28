@@ -1,0 +1,13 @@
+{
+  "active": 1,
+  "authed": 1,
+  "brief": null,
+  "display": 1,
+  "endpoint": "Screen",
+  "funcs": [],
+  "id": 1,
+  "level": 0,
+  "name": "配屏模块",
+  "order": 1,
+  "parentId": 0
+}

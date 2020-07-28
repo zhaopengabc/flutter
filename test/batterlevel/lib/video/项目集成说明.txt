@@ -1,0 +1,110 @@
+import 'package:h_pad/video/videoplayer.dart';
+
+void initState() {
+。。。。。。。。。
+
+sdk = VideoPlayer.getInstance("cutVideo");
+}
+
+1. 设备搜索时：初始化
+	sdk.init();
+
+
+2. 登录成功后：开启切割任务======Navigator.of(context).pushNamed('Edit');
+
+	executeCutTask('rtsp://admin:hidoo123@192.168.10.65:554/');
+
+  // 执行切割任务
+  executeCutTask(url) {
+    print('执行切割任务');
+    VideoPlayer sdk = VideoPlayer.getInstance("cutVideo");
+    NovaInitItem novaInitItem = new NovaInitItem(url, "", true, true, 8, 8, 1280, 720);
+    sdk.createCutTask(novaInitItem);
+  }
+
+3. 退出时：停止切割任务
+	sdk.stopCutTask()
+
+4. ==========input列表======InputListView.dart====================== 'assets/images/input/input1.png',
+
+  Widget listItem(InputModel inputModel, InputProvider inputProvider, bool isCrop, int index){
+    final crops = inputModel.crops;
+    var inputName = isCrop ? crops[index].name : inputModel.general?.name;
+    bool isVideoClosed = Provider.of<VideoState>(context,listen: false).isVideoClosed == null? false : Provider.of<VideoState>(context).isVideoClosed;
+    int layerId = isCrop ? (inputModel.inputId * 1000 + crops[index].cropId) : inputModel.inputId;
+    int type = isCrop ? 1 : 0;
+
+    sdk.createView(null, true, inputModel.inputId, -1, layerId, type, 1==type?crops[index]?.x:0, 1==type?crops[index]?.y:0, 1==type?crops[index]?.width:0, 1==type?crops[index]?.heigth:0),
+
+
+5. ==========图层===ScreenView.dart==========================
+
+    bool isVideoClosed = Provider.of<VideoState>(context,listen: false).isVideoClosed == null? false : Provider.of<VideoState>(context).isVideoClosed;
+    int type = item.screenLayer?.source?.cropId==255 ? 0 : 1;
+    int layerId = item.screenLayer?.source?.cropId==255 ? item.screenLayer?.layerId : (item.screenLayer?.source?.inputId + item.screenLayer?.source?.cropId);
+
+    child: sdk.createView(null, true, item.screenLayer?.source?.inputId, item.screenLayer?.screenId, layerId, type, 1==type?item.inputCrop?.x:0, 1==type?item.inputCrop?.y:0, 1==type?item.inputCrop?.width:0, 1==type?item.inputCrop?.heigth:0),
+
+
+    List<VideoModel> videoLayers = List();
+    InputCrop inputCrop=null;  // 就这一行
+
+
+            if(item.source.cropId != 255) {
+              int cropIndex = inputProvider.findCropSourceById(inputProvider.onlineInputList[inputIndex], item.source.cropId);
+              if(cropIndex != -1) {
+                hasSource = true;
+                inputCrop = inputProvider.inputList[inputIndex].crops[cropIndex]; // 就这一行
+              } else {
+                hasSource = false;
+              }
+            } else {
+              hasSource = true;
+            }
+
+
+6. ==========切源======LayoutView.dart=======================
+        VideoPlayer sdk = VideoPlayer.getInstance("cutVideo");
+        int type = source?.cropId == 255? 0 : 1;
+        int layerId = source?.cropId == 255? replaceInputItem.screenLayer.layerId : (source?.inputId*1000+source?.cropId);
+        sdk.changeVideoIndexByLayerId(currentScreen.screenId, layerId, source?.inputId, type, pInputCrop?.x, pInputCrop?.y, pInputCrop?.width, pInputCrop?.heigth);
+
+
+flutter画布渲染方式
+1.
+import 'package:h_pad/video/videoplayer.dart';
+import 'package:h_pad/video/videoparam.dart';
+import 'package:h_pad/states/edit/VideoProvider.dart';
+
+2.InputListView.dart
+    Consumer<VideoProvider>(builder: (BuildContext context, data, Widget child) {
+                                  return sdk.createView(null, true, inputModel.inputId, -1, layerId, type, 1==type?crops[index]?.x:0, 1==type?crops[index]?.y:0, 1==type?crops[index]?.width:0, 1==type?crops[index]?.heigth:0, inputModel.resolution?.width, inputModel.resolution?.height, context);
+                                }),
+
+		Flutter調用接口定义说明
+1.初始化
+  接口名称：init
+  参数：无
+  返回值：整数(0-成功；其它-失败)
+
+2.开始任务
+  接口名称：startTask
+  参数：url：rtsp地址
+        row：行数(固定传1)
+        column：列数(固定传1)
+        w：视频分辨率-宽度
+        h：视频分辨率-高度
+        displayVideo：是否显示视频[1-是;0-否]
+  返回值：整数(0-成功；其它-失败)
+
+3.获得图片帧数据
+  接口名称：getImageFrame
+  参数：无
+  返回值：字节数组（yuv轉圖片后的數據）
+
+4.停止任务
+  接口名称：stopTask
+  参数：无
+  返回值：整数(0-成功；其它-失败)
+
+5.銷毀（現在沒有使用，如果IOS需要的話可以加上）

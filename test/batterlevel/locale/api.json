@@ -1,0 +1,116 @@
+{
+    "version":"V1.3.0",
+    "config_info": {
+        "REBOOT": true,
+        "SCREENPOWER": true,
+        "SYNC_PLAY": true,
+        "SPOTS":true,
+        "VIDEO_SOURCE_SWITCH": true,
+        "UPDATE": true,
+        "SCREENSHOT": true,
+        "TIMEZONE": true,
+        "POWER": true,
+        "VOICE": true,
+        "LIGHT": true,
+        "UPDATEOS": true,
+        "CARE":true,
+        "VNNOX":true,
+        "PLAYLOG":true,
+        "COLORTEMPERATURE":true,
+        "INDICATORLIGHT":true,
+        "NEXUSFONT":true,
+        "TERMINALINFO":true,
+        "NEWPROTOCOL": true,
+        "RELAYPOWER":true,
+        "RELAYPOWERCONFIG":true,
+        "FIXEDPOINT":true,
+        "RESET":true,
+        "Brightness":{
+            "Validity":true,
+            "CompleteCron":true,
+            "FloatValue":true
+        },
+        "WIFI": true,
+        "CustomResolution": true,
+        "NetWork": {
+            "IsSupport": true,
+            "Wifi": true,
+            "Wired":true,
+            "AP":true,
+            "Mobile":true,
+            "IsSupportNetWorkCheck":true,
+            "WiFiApSwitch":false
+        },
+        "VideoSource":{
+            "IsSupport": true,
+            "Hdmi":true,
+            "Input":{
+                "IsSupport": true,
+                "Hdmi":true
+            },
+            "Output":{
+                "IsSupport": true,
+                "HdmiToLvds":true
+            }
+        },
+        "RadioFrequencyManage":{
+            "IsSupport":true,
+            "IsSupportLoraInfo": true,
+            "IsSupportProduct":true
+        },
+        "Upgrade":{
+            "IsSupportCheckValid":true
+        },
+        "SourceOutMode":{
+            "IsSupportChangeSourceOutMode":true
+        },
+        "ZipRunningLog":{
+            "IsSupportZipRunningLogInfo":true
+        },
+        "ReceiveCard":{
+            "IsSupport":true,
+            "Config":true,
+            "Temperature":true
+        },
+        "ScreenConfig":{
+            "IsSupport":true,
+            "Config":true,
+            "ScreenJoint":true,
+            "IsSupportProduct":true
+        },
+        "Monitoring":{
+            "IsSupport":true,
+            "ClearMedia":true,
+            "Memory":true,
+            "CPU":true,
+            "AmbientBrightness":true
+        },
+        "TimeControl":{
+            "IsSupport":true,
+            "Manual":true,
+            "NTP":true,
+            "Lora":true
+        },
+        "Resolution":{
+        "IsSupport":true,
+        "CustomResolution":true
+        },
+        "SensorBoard":{
+        "IsSupport":true,
+        "SensorInfo":true,
+        "IsSupportProduct":true
+        },
+        "Rotation":{
+        "IsSupport":false,
+        "IsSupportProduct": false
+        },
+        "PlayManager":{
+        "IsSupport":true,
+        "ProgramListManager":true
+        },
+        "InfraredDetector":{
+        "IsSupport":true,
+        "IsSupportProduct":true
+        }
+    }
+}

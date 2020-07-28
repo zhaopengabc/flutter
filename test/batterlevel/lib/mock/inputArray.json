@@ -1,0 +1,302 @@
+[
+    {
+        "inputId": 1,
+        "deviceId": 0,
+        "slotId": 0,
+        "interfaceId": 0,
+        "interfaceType": 4,
+        "iSignal": 0,
+        "isEDIDSetting": 0,
+        "general": {
+            "name": "Input 1",
+            "colorDepth": 0,
+            "colorSpace": 0,
+            "sampleRate": 0,
+            "connectCapacity": 0,
+            "HDCPEncryted": 0
+        },
+        "resolution": {
+            "width": 1920,
+            "height": 1080,
+            "refresh": 6000,
+            "isInterlace": 0
+        },
+        "timing": {
+            "refreshRate": 0,
+            "horizontal": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            },
+            "vertical": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            }
+        },
+        "crops": [
+            {
+                "cropId": 0,
+                "name": "crop0",
+                "width": 0,
+                "heigth": 0,
+                "x": 0,
+                "y": 0
+            }
+        ]
+    },
+    {
+        "inputId": 2,
+        "deviceId": 0,
+        "slotId": 0,
+        "interfaceId": 0,
+        "interfaceType": 4,
+        "iSignal": 0,
+        "isEDIDSetting": 0,
+        "general": {
+            "name": "Input 2",
+            "colorDepth": 0,
+            "colorSpace": 0,
+            "sampleRate": 0,
+            "connectCapacity": 0,
+            "HDCPEncryted": 0
+        },
+        "resolution": {
+            "width": 1920,
+            "height": 1080,
+            "refresh": 6000,
+            "isInterlace": 0
+        },
+        "timing": {
+            "refreshRate": 0,
+            "horizontal": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            },
+            "vertical": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            }
+        },
+        "crops": [
+            {
+                "cropId": 0,
+                "name": "crop0",
+                "width": 0,
+                "heigth": 0,
+                "x": 0,
+                "y": 0
+            }
+        ]
+    },
+    {
+        "inputId": 3,
+        "deviceId": 0,
+        "slotId": 0,
+        "interfaceId": 0,
+        "interfaceType": 4,
+        "iSignal": 0,
+        "isEDIDSetting": 0,
+        "general": {
+            "name": "Input 3",
+            "colorDepth": 0,
+            "colorSpace": 0,
+            "sampleRate": 0,
+            "connectCapacity": 0,
+            "HDCPEncryted": 0
+        },
+        "resolution": {
+            "width": 1920,
+            "height": 1080,
+            "refresh": 6000,
+            "isInterlace": 0
+        },
+        "timing": {
+            "refreshRate": 0,
+            "horizontal": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            },
+            "vertical": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            }
+        },
+        "crops": [
+            {
+                "cropId": 0,
+                "name": "crop0",
+                "width": 0,
+                "heigth": 0,
+                "x": 0,
+                "y": 0
+            }
+        ]
+    },
+    {
+        "inputId": 4,
+        "deviceId": 0,
+        "slotId": 0,
+        "interfaceId": 0,
+        "interfaceType": 4,
+        "iSignal": 0,
+        "isEDIDSetting": 0,
+        "general": {
+            "name": "Input 4",
+            "colorDepth": 0,
+            "colorSpace": 0,
+            "sampleRate": 0,
+            "connectCapacity": 0,
+            "HDCPEncryted": 0
+        },
+        "resolution": {
+            "width": 1920,
+            "height": 1080,
+            "refresh": 6000,
+            "isInterlace": 0
+        },
+        "timing": {
+            "refreshRate": 0,
+            "horizontal": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            },
+            "vertical": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            }
+        },
+        "crops": [
+            {
+                "cropId": 0,
+                "name": "crop0",
+                "width": 0,
+                "heigth": 0,
+                "x": 0,
+                "y": 0
+            }
+        ]
+    },
+    {
+        "inputId": 5,
+        "deviceId": 0,
+        "slotId": 0,
+        "interfaceId": 0,
+        "interfaceType": 4,
+        "iSignal": 0,
+        "isEDIDSetting": 0,
+        "general": {
+            "name": "Input 5",
+            "colorDepth": 0,
+            "colorSpace": 0,
+            "sampleRate": 0,
+            "connectCapacity": 0,
+            "HDCPEncryted": 0
+        },
+        "resolution": {
+            "width": 1920,
+            "height": 1080,
+            "refresh": 6000,
+            "isInterlace": 0
+        },
+        "timing": {
+            "refreshRate": 0,
+            "horizontal": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            },
+            "vertical": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            }
+        },
+        "crops": [
+            {
+                "cropId": 0,
+                "name": "crop0",
+                "width": 0,
+                "heigth": 0,
+                "x": 0,
+                "y": 0
+            }
+        ]
+    },
+    {
+        "inputId": 6,
+        "deviceId": 0,
+        "slotId": 0,
+        "interfaceId": 0,
+        "interfaceType": 4,
+        "iSignal": 0,
+        "isEDIDSetting": 0,
+        "general": {
+            "name": "Input 6",
+            "colorDepth": 0,
+            "colorSpace": 0,
+            "sampleRate": 0,
+            "connectCapacity": 0,
+            "HDCPEncryted": 0
+        },
+        "resolution": {
+            "width": 1920,
+            "height": 1080,
+            "refresh": 6000,
+            "isInterlace": 0
+        },
+        "timing": {
+            "refreshRate": 0,
+            "horizontal": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            },
+            "vertical": {
+                "addrTime": 0,
+                "frontPorch": 0,
+                "sync": 0,
+                "syncPolarity": 0,
+                "totalTime": 0
+            }
+        },
+        "crops": [
+            {
+                "cropId": 0,
+                "name": "crop0",
+                "width": 0,
+                "heigth": 0,
+                "x": 0,
+                "y": 0
+            }
+        ]
+    }
+]
