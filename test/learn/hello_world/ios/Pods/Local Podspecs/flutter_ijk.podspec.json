@@ -1,0 +1,31 @@
+{
+  "name": "flutter_ijk",
+  "version": "0.0.1",
+  "summary": "A new Flutter plugin.",
+  "description": "A new Flutter plugin.",
+  "homepage": "http://example.com",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "jadennn": "email_jade@163.com"
+  },
+  "source": {
+    "path": "IJKMediaFramework.framework"
+  },
+  "source_files": "Classes/**/*",
+  "public_header_files": "Classes/**/*.h",
+  "dependencies": {
+    "Flutter": [
+
+    ]
+  },
+  "vendored_frameworks": "IJKMediaFramework.framework",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "libraries": [
+    "z",
+    "c++"
+  ]
+}
