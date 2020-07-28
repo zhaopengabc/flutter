@@ -1,0 +1,7 @@
+flutter_application_path = '../video_player/'
+
+target 'Test' do
+
+  eval(File.read(File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')),binding)
+
+end
