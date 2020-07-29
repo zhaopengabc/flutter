@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-final MethodChannel _channel = const MethodChannel('hidoo/flutterijk')
+final MethodChannel _channel = const MethodChannel('jaden.com/flutterijk')
 // This will clear all open videos on the platform when a full restart is
 // performed.
 // TODO(amirh): remove this on when the invokeMethod update makes it to stable Flutter.
@@ -248,7 +248,7 @@ class IjkPlayerController extends ValueNotifier<IjkPlayerValue> {
         case 'bufferingUpdate':
           value =
               value.copyWith(buffered: Duration(milliseconds: map['values']));
-          // print('-------bufferingUpdate ${value}');
+          // print('${value}');
           break;
         case 'bufferingStart':
           value = value.copyWith(isBuffering: true);
@@ -272,7 +272,7 @@ class IjkPlayerController extends ValueNotifier<IjkPlayerValue> {
   }
 
   EventChannel _eventChannelFor(int textureId) {
-    return EventChannel('hidoo/flutterijk/videoEvents$textureId');
+    return EventChannel('jaden.com/flutterijk/videoEvents$textureId');
   }
 
   @override
@@ -299,7 +299,6 @@ class IjkPlayerController extends ValueNotifier<IjkPlayerValue> {
 
   Future<void> play() async {
     value = value.copyWith(isPlaying: true);
-    print("play ----${value}");
     await _applyPlayPause();
   }
 
@@ -349,7 +348,6 @@ class IjkPlayerController extends ValueNotifier<IjkPlayerValue> {
             return;
           }
           value = value.copyWith(position: newPosition);
-          // print("  ------ newPosition ${value}");
         },
       );
     } else {

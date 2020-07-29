@@ -16,7 +16,6 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     NSAssert(self, @"super init cannot be nil");
     if (self == nil) return nil;
     _registry = registry;
-    NSLog(@" -------_registry  : %@",_registry);
     return self;
 }
 
@@ -271,82 +270,21 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 }
 
 - (CVPixelBufferRef)copyPixelBuffer {
-    CVPixelBufferRef pixelBuffer = [_player framePixelbuffer];
+    CVPixelBufferRef pixelBuffer;
+
+    // int count = 0;
+
+    [_player framePixelbufferLock];
+    pixelBuffer  = [_player framePixelbuffer];
     if(pixelBuffer != nil){
         CFRetain(pixelBuffer);
+        //CVPixelBufferRelease(pixelBuffer);
+        // count =  CFGetRetainCount(pixelBuffer);
+        // NSLog(@"count : %d++++++++++++",CFGetRetainCount(pixelBuffer));
     }
-
-// CVPixelBufferLockBaseAddress(pixelBuffer, 0);// 锁定pixel buffer的基地址
-
-//     void * baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer);// 得到pixel buffer的基地址
-//     size_t width = CVPixelBufferGetWidth(pixelBuffer);
-//     size_t height = CVPixelBufferGetHeight(pixelBuffer);
-//     size_t bufferSize = CVPixelBufferGetDataSize(pixelBuffer);
-//     size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);// 得到pixel buffer的行字节数
-
-//     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();// 创建一个依赖于设备的RGB颜色空间
-//     CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, baseAddress, bufferSize, NULL);
-
-//     CGImageRef cgImage = CGImageCreate(width,
-//                                        height,
-//                                        8,
-//                                        32,
-//                                        bytesPerRow,
-//                                        rgbColorSpace,
-//                                        kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrderDefault,
-//                                        provider,
-//                                        NULL,
-//                                        true,
-//                                        kCGRenderingIntentDefault);//这个是建立一个CGImageRef对象的函数
-
-//     UIImage *image = [UIImage imageWithCGImage:cgImage];
-//     CGImageRelease(cgImage);  //类似这些CG...Ref 在使用完以后都是需要release的，不然内存会有问题
-//     CGDataProviderRelease(provider);
-//     CGColorSpaceRelease(rgbColorSpace);
-//     // NSData* imageData = UIImageJPEGRepresentation(image, 1.0);//1代表图片是否压缩
-//     NSData* imageData = UIImagePNGRepresentation(image);
-//     image = [UIImage imageWithData:imageData];
-//     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);   // 解锁pixel buffer
-
-
-
-//     // NSLog(@"---------------image : %@",imageData);
+    // CVPixelBufferRetain(pixelBuffer);
+    [_player framePixelbufferUnlock];
     return pixelBuffer;
-}
-- (UIImage*)pixelBufferToImage:(CVPixelBufferRef) pixelBufffer{
-    CVPixelBufferLockBaseAddress(pixelBufffer, 0);// 锁定pixel buffer的基地址
-    NSLog(@"---------------------");
-
-    void * baseAddress = CVPixelBufferGetBaseAddress(pixelBufffer);// 得到pixel buffer的基地址
-    size_t width = CVPixelBufferGetWidth(pixelBufffer);
-    size_t height = CVPixelBufferGetHeight(pixelBufffer);
-    size_t bufferSize = CVPixelBufferGetDataSize(pixelBufffer);
-    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBufffer);// 得到pixel buffer的行字节数
-
-    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();// 创建一个依赖于设备的RGB颜色空间
-    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, baseAddress, bufferSize, NULL);
-
-    CGImageRef cgImage = CGImageCreate(width,
-                                       height,
-                                       8,
-                                       32,
-                                       bytesPerRow,
-                                       rgbColorSpace,
-                                       kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrderDefault,
-                                       provider,
-                                       NULL,
-                                       true,
-                                       kCGRenderingIntentDefault);//这个是建立一个CGImageRef对象的函数
-
-    UIImage *image = [UIImage imageWithCGImage:cgImage];
-    CGImageRelease(cgImage);  //类似这些CG...Ref 在使用完以后都是需要release的，不然内存会有问题
-    CGDataProviderRelease(provider);
-    CGColorSpaceRelease(rgbColorSpace);
-    NSData* imageData = UIImageJPEGRepresentation(image, 1.0);//1代表图片是否压缩
-    image = [UIImage imageWithData:imageData];
-    CVPixelBufferUnlockBaseAddress(pixelBufffer, 0);   // 解锁pixel buffer
-
-    return image;
 }
 
 - (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments {
@@ -386,7 +324,7 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 @implementation FlutterIjkPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel =
-    [FlutterMethodChannel methodChannelWithName:@"hidoo/flutterijk"
+    [FlutterMethodChannel methodChannelWithName:@"jaden.com/flutterijk"
                                 binaryMessenger:[registrar messenger]];
     FlutterIjkPlugin* instance = [[FlutterIjkPlugin alloc] initWithRegistrar:registrar];
     [registrar addMethodCallDelegate:instance channel:channel];
@@ -433,7 +371,7 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
         int64_t textureId = [_registry registerTexture:player];
         frameUpdater.textureId = textureId;
         FlutterEventChannel* eventChannel = [FlutterEventChannel
-                                             eventChannelWithName:[NSString stringWithFormat:@"hidoo/flutterijk/videoEvents%lld",
+                                             eventChannelWithName:[NSString stringWithFormat:@"jaden.com/flutterijk/videoEvents%lld",
                                                                    textureId]
                                              binaryMessenger:_messenger];
         [eventChannel setStreamHandler:player];
