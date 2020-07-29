@@ -17,8 +17,8 @@ class VideoPageState extends State<VideoPage> {
   void initState() {
     super.initState();
     _controller =
-        IjkPlayerController.network("rtsp://192.168.10.95:8554/h264ESVideoTest")
-          // _controller = IjkPlayerController.asset("video/big_buck_bunny.mp4")
+        IjkPlayerController.network("rtsp://admin:hidoo123@192.168.10.64:554/")
+//           _controller = IjkPlayerController.asset("video/big_buck_bunny.mp4")
           ..initialize().then((_) {
             setState(() {});
             _controller.play();
