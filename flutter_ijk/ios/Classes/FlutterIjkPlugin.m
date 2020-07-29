@@ -16,6 +16,7 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     NSAssert(self, @"super init cannot be nil");
     if (self == nil) return nil;
     _registry = registry;
+    NSLog(@" -------_registry  : %@",_registry);
     return self;
 }
 
@@ -29,7 +30,6 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 @property(readonly, nonatomic) CADisplayLink* displayLink;
 @property(nonatomic) FlutterEventChannel* eventChannel;
 @property(nonatomic) FlutterEventSink eventSink;
-// @property(nonatomic) IJKFFMoviePlayerController* player;
 @property(nonatomic, readonly) bool disposed;
 @property(nonatomic, readonly) bool isPlaying;
 @property(nonatomic, readonly) bool isLooping;
@@ -51,7 +51,7 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     self = [super init];
     NSAssert(self, @"super init cannot be nil");
     _isInitialized = false;
-    _isPlaying = true;
+    _isPlaying = false;
     _disposed = false;
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
@@ -82,7 +82,7 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
                                                selector:@selector(onDisplayLink:)];
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     _displayLink.paused = YES;
-    sleep(1);
+    
     return self;
 }
 
@@ -240,14 +240,12 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 
 - (void)play {
     _isPlaying = true;
-    // [self updatePlayingState];
-
-    NSLog(@"play -------------------");
+    [self updatePlayingState];
 }
 
 - (void)pause {
     _isPlaying = false;
-     [self updatePlayingState];
+    [self updatePlayingState];
 }
 
 - (int64_t)position {
@@ -277,8 +275,78 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     if(pixelBuffer != nil){
         CFRetain(pixelBuffer);
     }
-    // NSLog(@"===========%@",pixelBuffer);
+
+// CVPixelBufferLockBaseAddress(pixelBuffer, 0);// 锁定pixel buffer的基地址
+
+//     void * baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer);// 得到pixel buffer的基地址
+//     size_t width = CVPixelBufferGetWidth(pixelBuffer);
+//     size_t height = CVPixelBufferGetHeight(pixelBuffer);
+//     size_t bufferSize = CVPixelBufferGetDataSize(pixelBuffer);
+//     size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);// 得到pixel buffer的行字节数
+
+//     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();// 创建一个依赖于设备的RGB颜色空间
+//     CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, baseAddress, bufferSize, NULL);
+
+//     CGImageRef cgImage = CGImageCreate(width,
+//                                        height,
+//                                        8,
+//                                        32,
+//                                        bytesPerRow,
+//                                        rgbColorSpace,
+//                                        kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrderDefault,
+//                                        provider,
+//                                        NULL,
+//                                        true,
+//                                        kCGRenderingIntentDefault);//这个是建立一个CGImageRef对象的函数
+
+//     UIImage *image = [UIImage imageWithCGImage:cgImage];
+//     CGImageRelease(cgImage);  //类似这些CG...Ref 在使用完以后都是需要release的，不然内存会有问题
+//     CGDataProviderRelease(provider);
+//     CGColorSpaceRelease(rgbColorSpace);
+//     // NSData* imageData = UIImageJPEGRepresentation(image, 1.0);//1代表图片是否压缩
+//     NSData* imageData = UIImagePNGRepresentation(image);
+//     image = [UIImage imageWithData:imageData];
+//     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);   // 解锁pixel buffer
+
+
+
+//     // NSLog(@"---------------image : %@",imageData);
     return pixelBuffer;
+}
+- (UIImage*)pixelBufferToImage:(CVPixelBufferRef) pixelBufffer{
+    CVPixelBufferLockBaseAddress(pixelBufffer, 0);// 锁定pixel buffer的基地址
+    NSLog(@"---------------------");
+
+    void * baseAddress = CVPixelBufferGetBaseAddress(pixelBufffer);// 得到pixel buffer的基地址
+    size_t width = CVPixelBufferGetWidth(pixelBufffer);
+    size_t height = CVPixelBufferGetHeight(pixelBufffer);
+    size_t bufferSize = CVPixelBufferGetDataSize(pixelBufffer);
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBufffer);// 得到pixel buffer的行字节数
+
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();// 创建一个依赖于设备的RGB颜色空间
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, baseAddress, bufferSize, NULL);
+
+    CGImageRef cgImage = CGImageCreate(width,
+                                       height,
+                                       8,
+                                       32,
+                                       bytesPerRow,
+                                       rgbColorSpace,
+                                       kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrderDefault,
+                                       provider,
+                                       NULL,
+                                       true,
+                                       kCGRenderingIntentDefault);//这个是建立一个CGImageRef对象的函数
+
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    CGImageRelease(cgImage);  //类似这些CG...Ref 在使用完以后都是需要release的，不然内存会有问题
+    CGDataProviderRelease(provider);
+    CGColorSpaceRelease(rgbColorSpace);
+    NSData* imageData = UIImageJPEGRepresentation(image, 1.0);//1代表图片是否压缩
+    image = [UIImage imageWithData:imageData];
+    CVPixelBufferUnlockBaseAddress(pixelBufffer, 0);   // 解锁pixel buffer
+
+    return image;
 }
 
 - (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments {
@@ -318,7 +386,7 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 @implementation FlutterIjkPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel =
-    [FlutterMethodChannel methodChannelWithName:@"jaden.com/flutterijk"
+    [FlutterMethodChannel methodChannelWithName:@"hidoo/flutterijk"
                                 binaryMessenger:[registrar messenger]];
     FlutterIjkPlugin* instance = [[FlutterIjkPlugin alloc] initWithRegistrar:registrar];
     [registrar addMethodCallDelegate:instance channel:channel];
@@ -346,109 +414,61 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     } else if ([@"create" isEqualToString:call.method]) {
         NSDictionary* argsMap = call.arguments;
         FLTIJKFrameUpdater* frameUpdater = [[FLTIJKFrameUpdater alloc] initWithRegistry:_registry];
-        NSString* dataSource ;
-        //= argsMap[@"asset"];
+        NSString* dataSource = argsMap[@"asset"];
         FLTIJKVideoPlayer* player;
-        // if (dataSource) {
-        //     NSString* assetPath;
-        //     if (![package isEqual:[NSNull null]]) {
-        //         assetPath = [_registrar lookupKeyForAsset:dataSource fromPackage:package];
-        //     } else {
-        //         assetPath = [_registrar lookupKeyForAsset:dataSource];
-        //     }
-        //     player = [[FLTIJKVideoPlayer alloc] initWithAsset:assetPath frameUpdater:frameUpdater];
-        // } else {
+        if (dataSource) {
+            NSString* assetPath;
+            NSString* package = argsMap[@"package"];
+            if (![package isEqual:[NSNull null]]) {
+                assetPath = [_registrar lookupKeyForAsset:dataSource fromPackage:package];
+            } else {
+                assetPath = [_registrar lookupKeyForAsset:dataSource];
+            }
+            player = [[FLTIJKVideoPlayer alloc] initWithAsset:assetPath frameUpdater:frameUpdater];
+        } else {
             dataSource = argsMap[@"uri"];
             player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:dataSource]
                                             frameUpdater:frameUpdater];
-        // }
-        // sleep(1);
-        NSLog(@"--------------------------------------------------");
-    CVPixelBufferRef pixelBuffer0 = [player copyPixelBuffer];
-    // if(pixelBuffer != nil){
-    //     CFRetain(pixelBuffer);
-    // }
-    NSLog(@"========------------++++++++++++++++----===%@",pixelBuffer0);
-
-        CVPixelBufferRef pixelBuffer1 = [player copyPixelBuffer];
-    // if(pixelBuffer != nil){
-    //     CFRetain(pixelBuffer);
-    // }
-
-
-    /*
-        FlutterMethodChannel* methodChannel = [FlutterMethodChannel
-                                            methodChannelWithName:@"OOAssetsMethodChannelName"
-                                            binaryMessenger:BinaryMessenger;
-    [methodChannel setMethodCallHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
-        if ([@"foo" isEqualToStr+(UIImage*)pixelBufferToImage:(CVPixelBufferRef) pixelBufffer{
-    CVPixelBufferLockBaseAddress(pixelBufffer, 0);// 锁定pixel buffer的基地址
-    void * baseAddress = CVPixelBufferGetBaseAddress(pixelBufffer);// 得到pixel buffer的基地址
-    size_t width = CVPixelBufferGetWidth(pixelBufffer);
-    size_t height = CVPixelBufferGetHeight(pixelBufffer);
-    size_t bufferSize = CVPixelBufferGetDataSize(pixelBufffer);
-    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBufffer);// 得到pixel buffer的行字节数
-
-    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();// 创建一个依赖于设备的RGB颜色空间
-    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, baseAddress, bufferSize, NULL);
-
-    CGImageRef cgImage = CGImageCreate(width,
-                                       height,
-                                       kBitsPerComponent,
-                                       kBitsPerPixel,
-                                       bytesPerRow,
-                                       rgbColorSpace,
-                                       kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrderDefault,
-                                       provider,
-                                       NULL,
-                                       true,
-                                       kCGRenderingIntentDefault);//这个是建立一个CGImageRef对象的函数
-
-    UIImage *image = [UIImage imageWithCGImage:cgImage];
-    CGImageRelease(cgImage);  //类似这些CG...Ref 在使用完以后都是需要release的，不然内存会有问题
-    CGDataProviderRelease(provider);
-    CGColorSpaceRelease(rgbColorSpace);
-    NSData* imageData = UIImageJPEGRepresentation(image, 1.0);//1代表图片是否压缩
-    image = [UIImage imageWithData:imageData];
-    CVPixelBufferUnlockBaseAddress(pixelBufffer, 0);   // 解锁pixel buffer
-
-    return image;
-}
-    /*
-    
-    */
-    NSLog(@"========----------------===%@",pixelBuffer1);
-
+        }
+        int64_t textureId = [_registry registerTexture:player];
+        frameUpdater.textureId = textureId;
+        FlutterEventChannel* eventChannel = [FlutterEventChannel
+                                             eventChannelWithName:[NSString stringWithFormat:@"hidoo/flutterijk/videoEvents%lld",
+                                                                   textureId]
+                                             binaryMessenger:_messenger];
+        [eventChannel setStreamHandler:player];
+        player.eventChannel = eventChannel;
+        _players[@(textureId)] = player;
+        result(@{@"textureId" : @(textureId)});
     } else {
-        // NSDictionary* argsMap = call.arguments;
-        // int64_t textureId = ((NSNumber*)argsMap[@"textureId"]).unsignedIntegerValue;
-        // FLTIJKVideoPlayer* player = _players[@(textureId)];
-        // NSLog(@"========textureId : %@",textureId);
-        // if ([@"dispose" isEqualToString:call.method]) {
-            // [_registry unregisterTexture:textureId];
-            // [_players removeObjectForKey:@(textureId)];
-            // [player dispose];
-            // result(nil);
-        // } else if ([@"setLooping" isEqualToString:call.method]) {
-        //     [player setIsLooping:[[argsMap objectForKey:@"looping"] boolValue]];
-        //     result(nil);
-        // } else if ([@"setVolume" isEqualToString:call.method]) {
-        //     [player setVolume:[[argsMap objectForKey:@"volume"] doubleValue]];
-        //     result(nil);
-        // } else if ([@"play" isEqualToString:call.method]) {
-        //     [player play];
-        //     result(nil);
-        // } else if ([@"position" isEqualToString:call.method]) {
-        //     result(@([player position]));
-        // } else if ([@"seekTo" isEqualToString:call.method]) {
-        //     [player seekTo:[[argsMap objectForKey:@"location"] intValue]];
-        //     result(nil);
-        // } else if ([@"pause" isEqualToString:call.method]) {
-        //     [player pause];
-        //     result(nil);
-        // } else {
-        //     result(FlutterMethodNotImplemented);
-        // }
+        NSDictionary* argsMap = call.arguments;
+        int64_t textureId = ((NSNumber*)argsMap[@"textureId"]).unsignedIntegerValue;
+        FLTIJKVideoPlayer* player = _players[@(textureId)];
+        if ([@"dispose" isEqualToString:call.method]) {
+            [_registry unregisterTexture:textureId];
+            [_players removeObjectForKey:@(textureId)];
+            [player dispose];
+            result(nil);
+        } else if ([@"setLooping" isEqualToString:call.method]) {
+            [player setIsLooping:[[argsMap objectForKey:@"looping"] boolValue]];
+            result(nil);
+        } else if ([@"setVolume" isEqualToString:call.method]) {
+            [player setVolume:[[argsMap objectForKey:@"volume"] doubleValue]];
+            result(nil);
+        } else if ([@"play" isEqualToString:call.method]) {
+            [player play];
+            result(nil);
+        } else if ([@"position" isEqualToString:call.method]) {
+            result(@([player position]));
+        } else if ([@"seekTo" isEqualToString:call.method]) {
+            [player seekTo:[[argsMap objectForKey:@"location"] intValue]];
+            result(nil);
+        } else if ([@"pause" isEqualToString:call.method]) {
+            [player pause];
+            result(nil);
+        } else {
+            result(FlutterMethodNotImplemented);
+        }
     }
 }
 

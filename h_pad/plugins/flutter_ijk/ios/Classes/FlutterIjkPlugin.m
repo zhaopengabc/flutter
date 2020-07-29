@@ -383,6 +383,7 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     NSData* imageData = UIImageJPEGRepresentation(image, 1.0);
     image = [UIImage imageWithData:imageData];
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    CVPixelBufferRelease(pixelBuffer);
 
         // if(pixelBuffer != nil){
         //     CFRetain(pixelBuffer);

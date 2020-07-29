@@ -156,7 +156,7 @@ class VideoPlayer {
       if (null != _mainChannel) {
         int code = await _mainChannel.invokeMethod("startTask", {
           // "url": param.url,
-          "url": 'rtsp://192.168.10.21:8554/h264ESVideoTest',
+          "url": 'rtsp://192.168.10.95:8554/h264ESVideoTest',
           "row": param.cutRow,
           "column": param.cutColumn,
           "w": param.width,

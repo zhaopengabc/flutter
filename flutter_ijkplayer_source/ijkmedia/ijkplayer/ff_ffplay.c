@@ -567,7 +567,7 @@ fail0:
 
     return ret;
 }
-
+/*
 //add for flutter
 #if !defined (__ANDROID__)
 static int copyAVFrameToPixelBuffer(FFPlayer *ffp, AVCodecParameters* avcp, const AVFrame* frame, CVPixelBufferRef cv_img, const size_t* plane_strides, const size_t* plane_rows)
@@ -664,7 +664,7 @@ int createCVPixelBuffer(FFPlayer *ffp, AVCodecParameters* avcp, AVFrame* frame, 
 }
 #endif
 //end
-
+*/
 static int decoder_decode_frame(FFPlayer *ffp, Decoder *d, AVFrame *frame, AVSubtitle *sub) {
     int ret = AVERROR(EAGAIN);
 
@@ -686,6 +686,7 @@ static int decoder_decode_frame(FFPlayer *ffp, Decoder *d, AVFrame *frame, AVSub
                             } else if (!ffp->decoder_reorder_pts) {
                                 frame->pts = frame->pkt_dts;
                             }
+                            /*
                             //add for flutter
                              #if !defined (__ANDROID__)
                             ffp_pixelbuffer_lock(ffp);
@@ -703,6 +704,7 @@ static int decoder_decode_frame(FFPlayer *ffp, Decoder *d, AVFrame *frame, AVSub
                             ffp_pixelbuffer_unlock(ffp);
                             #endif
                             //add end
+                            */
                         }
                         break;
                     case AVMEDIA_TYPE_AUDIO:
@@ -1795,6 +1797,11 @@ static int queue_picture(FFPlayer *ffp, AVFrame *src_frame, double pts, double d
             if (!ffp->szt_pixelbuffer) {
                 ALOGE("nil pixelBuffer in overlay\n");
             }
+            else
+            {
+              //  ALOGE("++++++++++++ ffp->szt_pixelbuffer : %s  size : %d \n",ffp->szt_pixelbuffer,sizeof(ffp->szt_pixelbuffer));
+            }
+            
         }
         #endif
         //add end

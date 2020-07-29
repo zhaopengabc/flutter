@@ -970,6 +970,9 @@ void videotoolbox_async_free(Ijk_VideoToolBox_Opaque* context)
     vtbformat_destroy(&context->fmt_desc);
 
     avcodec_parameters_free(&context->codecpar);
+
+
+    NSLog(@"++++++++++++++++ videotoolbox_async_free");
 }
 
 int videotoolbox_async_decode_frame(Ijk_VideoToolBox_Opaque* context)

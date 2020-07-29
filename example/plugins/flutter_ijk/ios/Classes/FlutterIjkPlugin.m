@@ -270,11 +270,20 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 }
 
 - (CVPixelBufferRef)copyPixelBuffer {
-    CVPixelBufferRef pixelBuffer = [_player framePixelbuffer];
+    CVPixelBufferRef pixelBuffer;
+
+    // int count = 0;
+
+    [_player framePixelbufferLock];
+    pixelBuffer  = [_player framePixelbuffer];
     if(pixelBuffer != nil){
         CFRetain(pixelBuffer);
+        CVPixelBufferRelease(pixelBuffer);
+        // count =  CFGetRetainCount(pixelBuffer);
+        // NSLog(@"count : %d++++++++++++",CFGetRetainCount(pixelBuffer));
     }
-    NSLog(@"=================pixelBuffer : %@",pixelBuffer);
+    // CVPixelBufferRetain(pixelBuffer);
+    [_player framePixelbufferUnlock];
     return pixelBuffer;
 }
 
@@ -315,11 +324,10 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 @implementation FlutterIjkPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel =
-    [FlutterMethodChannel methodChannelWithName:@"plugins.video/playerSDK"
+    [FlutterMethodChannel methodChannelWithName:@"jaden.com/flutterijk"
                                 binaryMessenger:[registrar messenger]];
     FlutterIjkPlugin* instance = [[FlutterIjkPlugin alloc] initWithRegistrar:registrar];
     [registrar addMethodCallDelegate:instance channel:channel];
-    NSLog(@"channel : %@--------",channel);
 }
 
 - (instancetype)initWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -340,20 +348,26 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
             [[_players objectForKey:textureId] dispose];
         }
         [_players removeAllObjects];
-
-        NSLog(@"init : %@--------",_players);
-        
         result(nil);
-    } else if ([@"startTask" isEqualToString:call.method]) {
-        NSLog(@"startTask : --------");
+    } else if ([@"create" isEqualToString:call.method]) {
         NSDictionary* argsMap = call.arguments;
         FLTIJKFrameUpdater* frameUpdater = [[FLTIJKFrameUpdater alloc] initWithRegistry:_registry];
-        NSString* dataSource = argsMap[@"url"];
-        NSLog(@"startTask : dataSource %@--------",dataSource);
+        NSString* dataSource = argsMap[@"asset"];
         FLTIJKVideoPlayer* player;
-        player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:dataSource]
+        if (dataSource) {
+            NSString* assetPath;
+            NSString* package = argsMap[@"package"];
+            if (![package isEqual:[NSNull null]]) {
+                assetPath = [_registrar lookupKeyForAsset:dataSource fromPackage:package];
+            } else {
+                assetPath = [_registrar lookupKeyForAsset:dataSource];
+            }
+            player = [[FLTIJKVideoPlayer alloc] initWithAsset:assetPath frameUpdater:frameUpdater];
+        } else {
+            dataSource = argsMap[@"uri"];
+            player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:dataSource]
                                             frameUpdater:frameUpdater];
-
+        }
         int64_t textureId = [_registry registerTexture:player];
         frameUpdater.textureId = textureId;
         FlutterEventChannel* eventChannel = [FlutterEventChannel
@@ -364,16 +378,7 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
         player.eventChannel = eventChannel;
         _players[@(textureId)] = player;
         result(@{@"textureId" : @(textureId)});
-    } else if ([@"getImageFrame" isEqualToString:call.method]) {
-
-        CVPixelBufferRef pixelBuffer = [_player framePixelbuffer];
-        if(pixelBuffer != nil){
-            CFRetain(pixelBuffer);
-        }
-        NSLog(@"=================pixelBuffer : %@",pixelBuffer);
-    
-    }
-    else {
+    } else {
         NSDictionary* argsMap = call.arguments;
         int64_t textureId = ((NSNumber*)argsMap[@"textureId"]).unsignedIntegerValue;
         FLTIJKVideoPlayer* player = _players[@(textureId)];
