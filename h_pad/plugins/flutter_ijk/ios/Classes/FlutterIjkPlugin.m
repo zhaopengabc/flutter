@@ -1,9 +1,13 @@
 #import "FlutterIjkPlugin.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
 #import <libkern/OSAtomic.h>
+//#import <Reachability.h>
 
 int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.timescale; }
 
+int flag = 0;
+int stop_flag = 0;
+int start_flag = 0;
 @interface FLTIJKFrameUpdater : NSObject
 @property(nonatomic) int64_t textureId;
 @property(nonatomic, readonly) NSObject<FlutterTextureRegistry>* registry;
@@ -32,6 +36,8 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 @property(nonatomic, readonly) bool disposed;
 @property(nonatomic, readonly) bool isPlaying;
 @property(nonatomic, readonly) bool isLooping;
+@property(nonatomic) int myPlaybackState;
+// @dynamic playbackState;
 @property(nonatomic, readonly) bool isInitialized;
 - (instancetype)initWithURL:(NSURL*)url frameUpdater:(FLTIJKFrameUpdater*)frameUpdater;
 - (void)play;
@@ -50,11 +56,13 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     self = [super init];
     NSAssert(self, @"super init cannot be nil");
     _isInitialized = false;
-    _isPlaying = true;
+    _isPlaying = false;
     _disposed = false;
     
+    
+
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
-    [options setPlayerOptionIntValue:1 forKey:@"videotoolbox"]; //硬解
+    [options setPlayerOptionIntValue:0 forKey:@"videotoolbox"]; //硬解
     [options setPlayerOptionIntValue:0 forKey:@"mediacodec-hevc"]; //h265硬解
     [options setFormatOptionValue:@"tcp" forKey:@"rtsp_transport"];
     [options setFormatOptionValue:@"prefer_tcp" forKey:@"rtsp_flags"];
@@ -63,15 +71,39 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     [options setFormatOptionIntValue:1024 forKey:@"max-buffer-size"];
     [options setPlayerOptionIntValue:1 forKey:@"infbuf"];
     [options setFormatOptionIntValue:100 forKey:@"analyzemaxduration"];
+    [options setFormatOptionIntValue:10 forKey:@"analyzeduration"];
     [options setFormatOptionIntValue:10240 forKey:@"probesize"];
     [options setFormatOptionIntValue:1 forKey:@"flush_packets"];
     [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];
-    [options setPlayerOptionIntValue:60 forKey:@"framedrop"];
+    [options setPlayerOptionIntValue:10 forKey:@"framedrop"];
     
+
+    // IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+    // [options setPlayerOptionIntValue:1 forKey:@"videotoolbox"]; //硬解
+    // [options setPlayerOptionIntValue:0 forKey:@"mediacodec-hevc"]; //h265硬解
+    // [options setFormatOptionValue:@"tcp" forKey:@"rtsp_transport"];
+    // [options setFormatOptionValue:@"prefer_tcp" forKey:@"rtsp_flags"];
+    // [options setFormatOptionValue:@"video" forKey:@"allowed_media_types"];
+    // [options setFormatOptionIntValue:10*1000*1000 forKey:@"timeout"];
+    // [options setPlayerOptionIntValue:10240 forKey:@"max-buffer-size"];
+    // [options setPlayerOptionIntValue:1 forKey:@"infbuf"];
+    // [options setFormatOptionIntValue:100 forKey:@"analyzemaxduration"];
+    // [options setFormatOptionIntValue:10 forKey:@"analyzeduration"];
+    // [options setFormatOptionIntValue:10240 forKey:@"probesize"];
+    // [options setFormatOptionIntValue:1 forKey:@"flush_packets"];
+    // [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];  
+    [options setFormatOptionIntValue:1 forKey:@"reconnect"];
+    [options setPlayerOptionIntValue:1 forKey:@"enable-accurate-seek"]; 
+    [options setPlayerOptionIntValue:0 forKey:@"skip_loop_filter"]; 
+    [options setPlayerOptionValue:@"1" forKey:@"an"];
+    // [options setPlayerOptionIntValue:3000 forKey:@"max_cached_duration"];   
+
     _player = [[IJKFFMoviePlayerController alloc] initWithContentURL:url withOptions:options];
     
     [self removeMovieNotificationObservers];
     [self installMovieNotificationObservers];
+    
+    // [_player setPauseInBackground:NO];
 
     if(![_player isPlaying]){
         [_player prepareToPlay];
@@ -81,7 +113,8 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
                                                selector:@selector(onDisplayLink:)];
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     _displayLink.paused = YES;
-    sleep(1);
+        // _displayLink.paused = NO;
+
     return self;
 }
 
@@ -182,17 +215,36 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 }
 
 - (void)moviePlayBackStateDidChange:(NSNotification*)notification {
+    _myPlaybackState = _player.playbackState;
     switch (_player.playbackState) {
         case IJKMPMoviePlaybackStateStopped:
+            
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: stoped---------", (int)_player.playbackState);
+            stop_flag = 2;
+            
             break;
             
         case IJKMPMoviePlaybackStatePlaying:
+           
             NSLog(@"IJKMPMoviePlayBackStateDidChange %d: playing+++++++++", (int)_player.playbackState);
+            if(flag == 1)
+            {
+                flag = 2;
+            }
+            stop_flag = 0;
+            start_flag = 1;
             break;
             
         case IJKMPMoviePlaybackStatePaused:
-            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused", (int)_player.playbackState);
+            
+            NSLog(@"IJKMPMoviePlayBackStateDidChange %d: paused--------", (int)_player.playbackState);
+            // if(flag == 1)
+            // {
+            //     flag = 2;
+            // }
+            flag = 4;
+            stop_flag = 3;
+            // start_flag = 2;
             break;
             
         case IJKMPMoviePlaybackStateInterrupted:
@@ -239,11 +291,12 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 
 - (void)play {
     _isPlaying = true;
-    // [self updatePlayingState];
+    [self updatePlayingState];
 }
 
 - (void)pause {
     _isPlaying = false;
+
     [self updatePlayingState];
 }
 
@@ -270,11 +323,18 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 }
 
 - (CVPixelBufferRef)copyPixelBuffer {
+
+    [_player framePixelbufferLock];
     CVPixelBufferRef pixelBuffer = [_player framePixelbuffer];
+
     if(pixelBuffer != nil){
-        CFRetain(pixelBuffer);
+        //CFRetain(pixelBuffer);
     }
-    // NSLog(@"==============---------===pixelBuffer : %@",pixelBuffer);
+    else
+    {
+        return nil;
+    }
+    [_player framePixelbufferUnlock];
     return pixelBuffer;
 }
 
@@ -309,6 +369,8 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 @property(readonly, nonatomic) NSObject<FlutterBinaryMessenger>* messenger;
 @property(readonly, nonatomic) NSMutableDictionary* players;
 @property(readonly, nonatomic) FLTIJKVideoPlayer* player;
+@property(readonly, nonatomic) FLTIJKFrameUpdater* frameUpdater;
+@property(readonly, nonatomic) NSString* dataSource;
 @property(readonly, nonatomic) NSObject<FlutterPluginRegistrar>* registrar;
 
 @end
@@ -320,7 +382,6 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
                                 binaryMessenger:[registrar messenger]];
     FlutterIjkPlugin* instance = [[FlutterIjkPlugin alloc] initWithRegistrar:registrar];
     [registrar addMethodCallDelegate:instance channel:channel];
-    NSLog(@"channel : %@--------",channel);
 }
 
 - (instancetype)initWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -334,7 +395,54 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    
+    // printf("_player.myPlaybackState : %d flag : %d stop_flag : %d start_flag : %d\n",_player.myPlaybackState,flag,stop_flag,start_flag);
+
+    if((flag == 2) && (_player.myPlaybackState == IJKMPMoviePlaybackStatePlaying))
+    {
+            [_registry unregisterTexture:0];
+            [_players removeObjectForKey:@(0)];
+            [_player dispose];
+
+      _frameUpdater = [[FLTIJKFrameUpdater alloc] initWithRegistry:_registry];
+        // _dataSource = argsMap[@"url"];
+        _player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:_dataSource]
+                                            frameUpdater:_frameUpdater]; 
+        // [_player initWithURL:[NSURL URLWithString:_dataSource] frameUpdater:_frameUpdater];
+
+        [_player play];
+
+        flag = 0;
+        stop_flag = 0;
+        // start_flag = 0;
+
+        result(@(0));
+        return;
+    }
+
+            
+            //   if((_player.myPlaybackState == IJKMPMoviePlaybackStateStopped) && (stop_flag != 0) )
+             if(((_player.myPlaybackState == IJKMPMoviePlaybackStateStopped)
+              || ((_player.myPlaybackState == IJKMPMoviePlaybackStatePaused) && (start_flag == 0))) && (stop_flag != 0) )
+             {
+                flag = 0;
+                stop_flag = 0;
+                start_flag = 0;
+                [_registry unregisterTexture:0];
+                [_players removeObjectForKey:@(0)];
+                [_player dispose];
+
+                _frameUpdater = [[FLTIJKFrameUpdater alloc] initWithRegistry:_registry];
+                // _dataSource = argsMap[@"url"];
+                _player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:_dataSource]
+                                                frameUpdater:_frameUpdater]; 
+                // [_player initWithURL:[NSURL URLWithString:_dataSource] frameUpdater:_frameUpdater];
+
+                [_player play];
+                _player.myPlaybackState = 1;
+                return;
+                // result(@(0));
+             }
+
     if ([@"init" isEqualToString:call.method]) {
         // Allow audio playback when the Ring/Silent switch is set to silent
         for (NSNumber* textureId in _players) {
@@ -343,160 +451,171 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
         }
         [_players removeAllObjects];
 
-        NSLog(@"init : %@--------",_players);
-        
-        result(nil);
+         NSLog(@"init : %@--------",_players);
+         result(@(0));
     } else if ([@"startTask" isEqualToString:call.method]) {
-        NSDictionary* argsMap = call.arguments;
-        FLTIJKFrameUpdater* frameUpdater = [[FLTIJKFrameUpdater alloc] initWithRegistry:_registry];
-        NSString* dataSource = argsMap[@"url"];
-        
-        _player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:dataSource]
-                                            frameUpdater:frameUpdater];
+            [_registry unregisterTexture:0];
+            [_players removeObjectForKey:@(0)];
+            [_player dispose];
 
-    } else if ([@"getImageFrame" isEqualToString:call.method]) {
+        NSDictionary* argsMap = call.arguments;
+        // FLTIJKFrameUpdater* frameUpdater
+        _frameUpdater = [[FLTIJKFrameUpdater alloc] initWithRegistry:_registry];
+        _dataSource = argsMap[@"url"];
+        _player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:_dataSource]
+                                            frameUpdater:_frameUpdater];
+        [_player play];
+
+        result(@(0));
+    }
+     else if ([@"getImageFrame" isEqualToString:call.method]) {
+
+         if(_player.isPlaying == false)
+         {
+            printf("player.isPlaying : false ... \n");
+            result(@'4');
+            return;
+         }
+        
+
+         if((_player.myPlaybackState != IJKMPMoviePlaybackStatePlaying))
+         {
+             if((stop_flag == 0))
+             {
+                 return ;
+             }
+             if((_player.myPlaybackState == IJKMPMoviePlaybackStatePaused) && (flag == 4))
+             {              
+                 flag = 1;
+                 stop_flag = 0;
+                  return;
+             }
+              
+ 
+            //   result (@'5');
+             return;
+         }
+        else
+        {
+            // if(flag == 2)
+            // {
+            //         [_registry unregisterTexture:0];
+            //         [_players removeObjectForKey:@(0)];
+            //         [_player dispose];
+
+            //         _frameUpdater = [[FLTIJKFrameUpdater alloc] initWithRegistry:_registry];
+            //          // _dataSource = argsMap[@"url"];
+            //         _player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:_dataSource]
+            //                                         frameUpdater:_frameUpdater]; 
+            //     // [_player initWithURL:[NSURL URLWithString:_dataSource] frameUpdater:_frameUpdater];
+
+            //     [_player play];
+
+            //     flag = 0;
+            //     stop_flag = 2;
+
+            //     result(@(0));
+            //     return;
+            // }
+        }
         CVPixelBufferRef pixelBuffer = [_player copyPixelBuffer];
 
          if(pixelBuffer == nil)
          {
-//             return nil;
+             printf("pixelBuffer : null \n");
+             CVPixelBufferRelease(pixelBuffer);
+             result(@(6));
+            return;
          }
-        CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-    void *baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer);
-    size_t width = CVPixelBufferGetWidth(pixelBuffer);
-    size_t height = CVPixelBufferGetHeight(pixelBuffer);
-    size_t bufferSize = CVPixelBufferGetDataSize(pixelBuffer);
-    size_t bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
-    
-    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, baseAddress, bufferSize, NULL);
-                //  kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrderDefault, 
-    CGImageRef cgImage = CGImageCreate(width,height,8, 32,bytesPerRow,rgbColorSpace,kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host,provider, NULL,true,kCGRenderingIntentDefault);
-    
-    
-    UIImage *image = [UIImage imageWithCGImage:cgImage];
-    
-    CGImageRelease(cgImage);
-    CGDataProviderRelease(provider);
-    CGColorSpaceRelease(rgbColorSpace);
-    
-    NSData* imageData = UIImageJPEGRepresentation(image, 1.0);
-    image = [UIImage imageWithData:imageData];
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-    CVPixelBufferRelease(pixelBuffer);
+        else
+        {
+                //  NSLog(@"imageData : %@ \n",pixelBuffer);
+                CVPixelBufferRetain(pixelBuffer);
+                CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+                void *baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer);
+                size_t width = CVPixelBufferGetWidth(pixelBuffer);
+                size_t height = CVPixelBufferGetHeight(pixelBuffer);
+                size_t bufferSize = CVPixelBufferGetDataSize(pixelBuffer);
+                size_t bytesPerRow = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+                
+                CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+                CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, baseAddress, bufferSize, NULL);
+                            //  kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrderDefault, 
+                CGImageRef cgImage = CGImageCreate(width,height,8, 32,bytesPerRow,rgbColorSpace,kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host,provider, NULL,true,kCGRenderingIntentDefault);
+                
+                
+                UIImage *image = [UIImage imageWithCGImage:cgImage];
 
-        // if(pixelBuffer != nil){
-        //     CFRetain(pixelBuffer);
-        // }
-        // NSLog(@"============+++++++=====pixelBuffer : %@",pixelBuffer);
+                NSData * imageData = UIImagePNGRepresentation(image);
+                //  NSData * imageData = UIImageJPEGRepresentation(image, 0.75);
+                // image = [UIImage imageWithData:imageData];
 
+                //   NSLog(@"imageData : %@ \n",imageData);
+  
+                CGImageRelease(cgImage);
+                CGDataProviderRelease(provider);
+                CGColorSpaceRelease(rgbColorSpace);
 
-    // //Lock the imagebuffer
-    // CVPixelBufferLockBaseAddress(pixelBuffer,0);
-    // size_t width = CVPixelBufferGetWidth(pixelBuffer);
-    // size_t height  = CVPixelBufferGetHeight(pixelBuffer);
-    // // Get information about the image
-    // uint8_t *baseAddress = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
-    // size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
-    // CVPlanarPixelBufferInfo_YCbCrBiPlanar *bufferInfo = (CVPlanarPixelBufferInfo_YCbCrBiPlanar *)baseAddress;
-    // // This just moved the pointer past the offset
-    // baseAddress = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-    // CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-    // UIImage *image = [NSData makeUIImage:baseAddress bufferInfo:bufferInfo width:width height:height bytesPerRow:bytesPerRow];
-    // // return image;
+                CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+                CVPixelBufferRelease(pixelBuffer);
+                
+                result ? result(imageData) : 7;
+                imageData = nil;
+                image = nil;
+                // return;
 
-        result ? result(imageData) : nil;
+                // //Lock the imagebuffer
+                // CVPixelBufferLockBaseAddress(pixelBuffer,0);
+                // size_t width = CVPixelBufferGetWidth(pixelBuffer);
+                // size_t height  = CVPixelBufferGetHeight(pixelBuffer);
+                // // Get information about the image
+                // uint8_t *baseAddress = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
+                // size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
+                // CVPlanarPixelBufferInfo_YCbCrBiPlanar *bufferInfo = (CVPlanarPixelBufferInfo_YCbCrBiPlanar *)baseAddress;
+                // // This just moved the pointer past the offset
+                // baseAddress = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+                // CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+                // UIImage *image = [NSData makeUIImage:baseAddress bufferInfo:bufferInfo width:width height:height bytesPerRow:bytesPerRow];
+                // // return image;
+            // CGImageRef image;
+            // CVPixelBufferRetain(pixelBuffer);
+
+            // CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+            // void *pxdata = CVPixelBufferGetBaseAddress(pixelBuffer);
+            // NSParameterAssert(pixelBuffer != NULL);
+            // size_t width = CVPixelBufferGetWidth(pixelBuffer);
+            // size_t height = CVPixelBufferGetHeight(pixelBuffer);
+            // CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+
+            // CGContextRef context = CGBitmapContextCreate(pixelBuffer, width,
+            //         height, 8, 4 * width, rgbColorSpace,
+            //         kCGImageAlphaNoneSkipFirst);
+            // NSParameterAssert(context);
+            // CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
+            // CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image),
+            //             CGImageGetHeight(image)), image);
+            // CGColorSpaceRelease(rgbColorSpace);
+            // CGContextRelease(context);
+
+            // CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+            // CVPixelBufferRelease(pixelBuffer);
+            // result ? result(image) : 7;
+                
+        }
     }
-    else {
-        // NSDictionary* argsMap = call.arguments;
-        // int64_t textureId = ((NSNumber*)argsMap[@"textureId"]).unsignedIntegerValue;
-        // FLTIJKVideoPlayer* player = _players[@(textureId)];
-        // if ([@"dispose" isEqualToString:call.method]) {
-        //     [_registry unregisterTexture:textureId];
-        //     [_players removeObjectForKey:@(textureId)];
-        //     [player dispose];
-        //     result(nil);
-        // } else if ([@"setLooping" isEqualToString:call.method]) {
-        //     [player setIsLooping:[[argsMap objectForKey:@"looping"] boolValue]];
-        //     result(nil);
-        // } else if ([@"setVolume" isEqualToString:call.method]) {
-        //     [player setVolume:[[argsMap objectForKey:@"volume"] doubleValue]];
-        //     result(nil);
-        // } else if ([@"play" isEqualToString:call.method]) {
-        //     [player play];
-        //     result(nil);
-        // } else if ([@"position" isEqualToString:call.method]) {
-        //     result(@([player position]));
-        // } else if ([@"seekTo" isEqualToString:call.method]) {
-        //     [player seekTo:[[argsMap objectForKey:@"location"] intValue]];
-        //     result(nil);
-        // } else if ([@"pause" isEqualToString:call.method]) {
-        //     [player pause];
-        //     result(nil);
-        // } else {
-        //     result(FlutterMethodNotImplemented);
-        // }
+    else if([@"stopTask" isEqualToString:call.method]){
+            [_registry unregisterTexture:0];
+            [_players removeObjectForKey:@(0)];
+            [_player dispose];
+
+        result(@(8));
+    }
+    else
+    {
+        // result(@(100));
+        // result(FlutterMethodNotImplemented);
     }
 }
-
-
-// + (UIImage *)makeUIImage:(uint8_t *)inBaseAddress bufferInfo:(CVPlanarPixelBufferInfo_YCbCrBiPlanar *)inBufferInfo width:(size_t)inWidth height:(size_t)inHeight bytesPerRow:(size_t)inBytesPerRow {
-    
-//     NSUInteger yOffset = EndianU32_BtoN(inBufferInfo->componentInfoY.offset);
-//     NSUInteger yPitch = EndianU32_BtoN(inBufferInfo->componentInfoY.rowBytes);
-    
-//     NSUInteger cbCrOffset = EndianU32_BtoN(inBufferInfo->componentInfoCbCr.offset);
-//     NSUInteger cbCrPitch = EndianU32_BtoN(inBufferInfo->componentInfoCbCr.rowBytes);
-    
-//     int bytesPerPixel = 4;
-    
-//     uint8_t *yBuffer = inBaseAddress + yOffset;
-//     uint8_t *cbCrBuffer = inBaseAddress + cbCrOffset;
-//     uint8_t *rgbBuffer = (uint8_t *)malloc(inWidth * inHeight * bytesPerPixel);
-    
-//     for(int y = 0; y < inHeight; y++)
-//     {
-//         uint8_t *rgbBufferLine = &rgbBuffer[y * inWidth * bytesPerPixel];
-//         uint8_t *yBufferLine = &yBuffer[y * yPitch];
-//         uint8_t *cbCrBufferLine = &cbCrBuffer[(y >> 1) * cbCrPitch];
-        
-//         for(int x = 0; x < inWidth; x++)
-//         {
-//             int16_t y = yBufferLine[x];
-//             int16_t cb = cbCrBufferLine[x & ~1] - 128;
-//             int16_t cr = cbCrBufferLine[x | 1] - 128;
-            
-//             uint8_t *rgbOutput = &rgbBufferLine[x*bytesPerPixel];
-            
-//             int16_t r = (int16_t)roundf( y + cr *  1.4 );
-//             int16_t g = (int16_t)roundf( y + cb * -0.343 + cr * -0.711 );
-//             int16_t b = (int16_t)roundf( y + cb *  1.765);
-            
-//             //ABGR
-//             rgbOutput[0] = 0xff;
-//             rgbOutput[1] = b > 0 ? (b < 255 ? b : 255) : 0;
-//             rgbOutput[2] = g > 0 ? (g < 255 ? g : 255) : 0;
-//             rgbOutput[3] = r > 0 ? (r < 255 ? r : 255) : 0;
-//         }
-//     }
-    
-//     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-//     CGContextRef context = CGBitmapContextCreate(rgbBuffer, yPitch, inHeight, 8,
-//                                                  yPitch*4, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedLast);
-    
-//     CGImageRef quartzImage = CGBitmapContextCreateImage(context);
-    
-//     CGContextRelease(context);
-//     CGColorSpaceRelease(colorSpace);
-    
-//     UIImage *image = [UIImage imageWithCGImage:quartzImage];
-    
-//     CGImageRelease(quartzImage);
-//     free(rgbBuffer);
-//     rgbBuffer = NULL;
-//     return  image;
- 
-// }
 
 @end
 

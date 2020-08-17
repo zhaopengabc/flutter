@@ -402,6 +402,8 @@ static IJKAVMoviePlayerController* instance;
 
 - (IJKMPMoviePlaybackState)playbackState
 {
+    //modify by zhaopeng
+    
     if (!_player)
         return IJKMPMoviePlaybackStateStopped;
     
@@ -416,6 +418,24 @@ static IJKAVMoviePlayerController* instance;
         mpState = IJKMPMoviePlaybackStatePaused;
     }
     return mpState;
+    /*
+    if (!_player)
+        return IJKMPMoviePlaybackStatePaused;
+    
+    IJKMPMoviePlaybackState mpState = IJKMPMoviePlaybackStatePaused;
+    if (_isCompleted) {
+        mpState = IJKMPMoviePlaybackStatePaused;
+    } else if (_isSeeking) {
+        mpState = IJKMPMoviePlaybackStateSeekingForward;
+    } else if ([self isPlaying]) {
+        mpState = IJKMPMoviePlaybackStatePlaying;
+    } else {
+        mpState = IJKMPMoviePlaybackStatePaused;
+    }
+    return mpState;
+    */
+    //end 
+
 }
 
 - (IJKMPMovieLoadState)loadState

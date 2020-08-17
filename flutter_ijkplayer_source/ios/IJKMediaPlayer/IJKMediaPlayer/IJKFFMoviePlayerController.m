@@ -636,6 +636,8 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
 
 - (IJKMPMoviePlaybackState)playbackState
 {
+    //modify by zhaopeng
+    
     if (!_mediaPlayer)
         return NO;
 
@@ -663,6 +665,36 @@ inline static int getPlayerOption(IJKFFOptionCategory category)
             break;
         }
     }
+    /*
+
+      if (!_mediaPlayer)
+        return NO;
+
+    IJKMPMoviePlaybackState mpState = IJKMPMoviePlaybackStatePaused;
+    int state = ijkmp_get_state(_mediaPlayer);
+    switch (state) {
+        case MP_STATE_STOPPED:
+        case MP_STATE_COMPLETED:
+        case MP_STATE_ERROR:
+        case MP_STATE_END:
+            mpState = IJKMPMoviePlaybackStatePaused;
+            break;
+        case MP_STATE_IDLE:
+        case MP_STATE_INITIALIZED:
+        case MP_STATE_ASYNC_PREPARING:
+        case MP_STATE_PAUSED:
+            mpState = IJKMPMoviePlaybackStatePaused;
+            break;
+        case MP_STATE_PREPARED:
+        case MP_STATE_STARTED: {
+            if (_seeking)
+                mpState = IJKMPMoviePlaybackStateSeekingForward;
+            else
+                mpState = IJKMPMoviePlaybackStatePlaying;
+            break;
+        }
+    }
+    */
     // IJKMPMoviePlaybackStatePlaying,
     // IJKMPMoviePlaybackStatePaused,
     // IJKMPMoviePlaybackStateStopped,
