@@ -970,9 +970,6 @@ void videotoolbox_async_free(Ijk_VideoToolBox_Opaque* context)
     vtbformat_destroy(&context->fmt_desc);
 
     avcodec_parameters_free(&context->codecpar);
-
-
-    NSLog(@"++++++++++++++++ videotoolbox_async_free");
 }
 
 int videotoolbox_async_decode_frame(Ijk_VideoToolBox_Opaque* context)
@@ -1081,6 +1078,8 @@ static int vtbformat_init(VTBFormatDesc *fmt_desc, AVCodecParameters *codecpar)
     if (width < 0 || height < 0) {
         goto fail;
     }
+
+    
 
     if (extrasize < 7 || extradata == NULL) {
         ALOGI("%s - avcC or hvcC atom data too small or missing", __FUNCTION__);

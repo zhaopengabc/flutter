@@ -50,6 +50,7 @@ static SDL_Aout *func_open_audio_output(IJKFF_Pipeline *pipeline, FFPlayer *ffp)
 
 IJKFF_Pipeline *ffpipeline_create_from_ffplay(FFPlayer *ffp)
 {
+
     IJKFF_Pipeline *pipeline = ffpipeline_alloc(&g_pipeline_class, sizeof(IJKFF_Pipeline_Opaque));
     if (!pipeline)
         return pipeline;
@@ -57,6 +58,7 @@ IJKFF_Pipeline *ffpipeline_create_from_ffplay(FFPlayer *ffp)
     IJKFF_Pipeline_Opaque *opaque = pipeline->opaque;
     opaque->ffp                   = ffp;
 
+    printf("333333333333333333333 \n");
     pipeline->func_destroy            = func_destroy;
     pipeline->func_open_video_decoder = func_open_video_decoder;
     pipeline->func_open_audio_output  = func_open_audio_output;

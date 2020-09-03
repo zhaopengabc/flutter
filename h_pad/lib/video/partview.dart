@@ -1,10 +1,3 @@
-/*
- * @Description: Do not edit
- * @Author: haojieyu (haojieyu@novastar.tech)
- * @Date: 2020-06-15 10:56:51
- * @LastEditors: haojieyu
- * @LastEditTime: 2020-07-07 11:57:26
- */ 
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:h_pad/style/index.dart';
@@ -15,7 +8,7 @@ import 'package:h_pad/video/videoplayer.dart';
 // 显示视频的视图-组件.
 // 采用canvas实现.
 class PartView extends CustomPainter {
-  PartView({Key key, this.player, this.url, this.autoPlay, this.inputId, this.screenId, this.layerId, this.type, this.cutX, this.cutY, this.cutW, this.cutH, this.videoW, this.videoH, this.context});
+  PartView({Key key, this.player, this.url, this.autoPlay, this.inputId, this.screenId, this.layerId, this.type, this.cutX, this.cutY, this.cutW, this.cutH, this.videoW, this.videoH, this.context, this.defaultColor});
 
   VideoPlayer player; // SDK对象实例
   String url;    // 视频URL，可以为空.目前未使用、预留参数
@@ -31,12 +24,13 @@ class PartView extends CustomPainter {
   int videoW;    // 源的分辨率-宽
   int videoH;    // 源的分辨率-高
   BuildContext context; // 上下文
+  Color defaultColor ; // 默认显示颜色
 
   @override
   void paint(Canvas canvas, Size size) {
 
     // 启用视频时从Provider中获得图片帧数据，否则采用默认图片.
-    if (player.useVideo && VideoProvider!=null && context!=null) {
+    if (player.useVideo && VideoProvider != null && context != null) {
       VideoProvider videoProvider = Provider?.of<VideoProvider>(context, listen: false);
       ui.Image img = videoProvider?.image;
 
@@ -62,9 +56,13 @@ class PartView extends CustomPainter {
       var src = Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble());
       var dst = Rect.fromLTWH(0, 0, size.width, size.height);
 
+      if (defaultColor == null) {
+        defaultColor = player.defaultColor;
+      }
+
       Paint paint = Paint();
       // canvas.drawImageRect(img, src, dst, paint);
-      paint.color = ColorMap.layer_noSource_color;
+      paint.color = defaultColor;
       canvas.drawRect(dst, paint);
     }
   }

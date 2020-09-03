@@ -1,4 +1,3 @@
-
 // 视频初始化参数
 class VideoParam {
   String url;       // RTSP地址
@@ -15,6 +14,5 @@ class VideoParam {
   static const int row = 8; // 切割行数
   static const int col = 8; // 切割列数
 
-//  VideoParam(this.url, this.cut, this.origin, this.cutRow, this.cutColumn, this.width, this.height, this.displayVideo);
   VideoParam(this.url, {this.cut=true, this.origin=true, this.cutRow=row, this.cutColumn=col, this.width=w, this.height=h, this.displayVideo=1});
 }

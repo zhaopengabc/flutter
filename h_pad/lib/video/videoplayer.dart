@@ -21,9 +21,13 @@ class VideoPlayer {
   VideoParam _initItem; // 视频链接所需的参数对象
   ui.Image _defaultImage; // 默认图片,不启用视频时显示该图片
   Timer _timeGetImage; // 周期获取图片帧数据的Timer
-  bool _useVideo = true; // 是否启用视频
+  bool _useVideo = true; // 是否启用视频[true-启用；false-不启用]
+  bool _taskSts = false; // 任务状态[true-工作中；false-未工作]
+  int _delayFreeFrameNum = 5; // 延迟释放图片的帧数
+  List<ui.Image> _cachesToDel = List<ui.Image>(); // 缓存要销毁的图片
+  Color defaultColor = Color(0xFF38ADB7); // 默认显示颜色
 
-  // 不要调用此方法，使用getInstance方法获得实例.
+  // 外部不要调用此方法，使用getInstance方法获得实例.
   VideoPlayer() {
     try {
       _loadDefaultImage().then((ui.Image onValue) {
@@ -31,12 +35,13 @@ class VideoPlayer {
         this._defaultImage = onValue;
       });
 
-      // if (Platform.isIOS) { // 目前不支持IOS
-      //   _useVideo = false;
-      // }
-      // if (!_useVideo) {
-      //   return;
-      // }
+      //  if (Platform.isIOS) { // 不支持IOS视频时需要将此if打开
+      //    _useVideo = false;
+      //  }
+
+      if (!_useVideo) {
+        return;
+      }
 
       _mainChannel =
           new MethodChannel('plugins.video/playerSDK'); // 加载与android通讯的channel
@@ -46,6 +51,9 @@ class VideoPlayer {
   }
 
   // 获得VideoPlayer实例.
+  //  参数：
+  //    videoId：视频标识.不同的视频标识对应不同的VideoPlayer实例.
+  //  返回值：VideoPlayer实例
   static VideoPlayer getInstance(String videoId) {
     VideoPlayer player = _playerMap[videoId];
 
@@ -93,15 +101,24 @@ class VideoPlayer {
   // 开启轮询获取图片帧数据的Timer.
   void _startTimer() {
     _timeGetImage = Timer.periodic(Duration(milliseconds: 60), (timer) {
-      _getImage().then((ui.Image onValue) {
-        try {
-          if (null != onValue && null != _provider) {
-            _provider.image = onValue;
+      if (_taskSts) {
+        _getImage().then((ui.Image onValue) {
+          try {
+            if (null != onValue && null != _provider) {
+              _provider.image = onValue;
+              _freeImage(onValue);
+            }
+          } catch (e) {
+            print('VideoProvider已经dispose, 视频播放失败！$e');
           }
-        } catch (e) {
-          print('VideoProvider已经dispose, 视频播放失败！');
-        }
-      });
+        });
+
+//        if (Platform.isIOS) {
+//          _getStatus(); // 外加方法，只针对IOS使用
+//        }
+      } else {
+        // print("任务停止-不再调用获取帧数据接口");
+      }
     });
   }
 
@@ -116,9 +133,12 @@ class VideoPlayer {
       if (null != result) {
         imageData = result;
         ui.Codec codec = await ui.instantiateImageCodec(imageData,
-            targetWidth: 1920, targetHeight: 1080);
+            targetWidth: VideoParam.w, targetHeight: VideoParam.h);
         ui.FrameInfo fi = await codec.getNextFrame();
         rs = fi.image;
+
+        codec.dispose();
+        codec = null;
       }
     } on PlatformException {
       imageData = null;
@@ -126,6 +146,18 @@ class VideoPlayer {
     }
 
     return rs;
+  }
+
+  // 延时释放图片.
+  // 缓存中图片数量达到指定的数量后释放掉旧的图片.从而变相实现延迟释放图片.
+  void _freeImage(ui.Image img) {
+    _cachesToDel.insert(0, img);
+
+    if (_cachesToDel.length >= _delayFreeFrameNum) {
+      _cachesToDel.last.dispose();
+      _cachesToDel.removeLast();
+    }
+//    print("释放图片! length:${_cachesToDel.length}");
   }
 
   // 加载默认图片
@@ -155,14 +187,14 @@ class VideoPlayer {
       }
       if (null != _mainChannel) {
         int code = await _mainChannel.invokeMethod("startTask", {
-          // "url": param.url,
-          "url": 'rtsp://192.168.10.95:8554/h264ESVideoTest',
+          "url": param.url,
           "row": param.cutRow,
           "column": param.cutColumn,
           "w": param.width,
           "h": param.height,
           "displayVideo": param.displayVideo
         });
+        _taskSts = true;
       } else {
         print("创建切割任务-失败：mainChannel为空!");
       }
@@ -172,25 +204,46 @@ class VideoPlayer {
   }
 
   // 停止切割任务
-  stopCutTask() async {
+  void stopCutTask() async {
     if (!_useVideo) {
       return;
     }
     try {
       if (null != _mainChannel) {
         int code = await _mainChannel.invokeMethod("stopTask");
+        _taskSts = false;
       } else {
         print("停止切割任务-失败：mainChannel为空!");
       }
     } catch (e) {
       print("停止切割任务时发生异常：$e");
     }
-    // finally {
-    //   _timeGetImage?.cancel();
-    //   _provider = null;
-    //   _initBln = false;
-    // }
   }
+
+//  // 查询状态并根据条件调用startTask.只针对IOS使用.
+//  void _getStatus() async {
+//    if (!_useVideo) {
+//      return;
+//    }
+//    try {
+//      if (null != _mainChannel) {
+//        int code = await _mainChannel.invokeMethod("getStatus");
+//
+//        if (code == 1) {
+//          if (_initItem != null) {
+//            int code = await _mainChannel.invokeMethod("startTask", {"url": _initItem.url,"row":_initItem.cutRow, "column":_initItem.cutColumn,"w":_initItem.width,"h":_initItem.height, "displayVideo":_initItem.displayVideo});
+//            print("查询状态-并调用startTask()方法!");
+//          } else {
+//            print("查询状态-失败：_initItem为空!");
+//          }
+//        }
+//      } else {
+//        print("查询状态-失败：mainChannel为空!");
+//      }
+//    } catch (e) {
+//      print("查询状态时发生异常：$e");
+//    }
+//  }
 
   // 切源.
   // type:0-源;1-截取源/子源
@@ -241,7 +294,8 @@ class VideoPlayer {
       int videoH,
       BuildContext context,
       {String url,
-      bool autoPlay = true}) {
+      bool autoPlay = true,
+      Color defaultColor}) {
     try {
       return CustomPaint(
         painter: PartView(
@@ -258,7 +312,8 @@ class VideoPlayer {
             cutH: cutH,
             videoW: videoW,
             videoH: videoH,
-            context: context),
+            context: context,
+            defaultColor: defaultColor),
       );
     } catch (e) {
       print("创建切割播放视图时发生异常：$e");
@@ -274,7 +329,7 @@ class VideoPlayer {
   //  cutH:截取的高(相对于源的高)
   //  videoW:截取所用父源的分辨率-宽
   //  videoH:截取所用父源的分辨率-高
-  // 返回值：List<int>计算后的坐标*尺寸
+  // 返回值：List<int>计算后的坐标*尺寸([0]:X、[1]:Y、[2]:W、[3]:H)
   List<double> calCopPosAD(int type, int cutX, int cutY, int cutW, int cutH,
       int videoW, int videoH, int inputId) {
     // 小图尺寸
@@ -299,6 +354,7 @@ class VideoPlayer {
       inputId?.toDouble()
     ];
 
+    // 截取源/子源时坐标尺寸需要重新计算:计算在大图上的坐标、尺寸.
     if (1 == type) {
       double rx = cutX * sImgW / videoW;
       double ry = cutY * sImgH / videoH;

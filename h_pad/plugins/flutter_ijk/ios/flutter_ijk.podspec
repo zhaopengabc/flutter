@@ -12,10 +12,15 @@ A new Flutter plugin.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'jadennn' => 'email_jade@163.com' }
   s.source           = { :path => 'IJKMediaFramework.framework' }
+  s.source           = { :path => 'SystemConfiguration.framework' }
+
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.vendored_frameworks = 'IJKMediaFramework.framework'
+  s.vendored_frameworks = 'IJKMediaFramework.framework' 
+  s.vendored_frameworks = 'SystemConfiguration.framework'
+  # s.vendored_frameworks = 'RealReachability'
+
 
   s.ios.deployment_target = '8.0'
   s.library = ['z', 'c++']

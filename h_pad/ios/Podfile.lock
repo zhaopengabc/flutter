@@ -63,9 +63,9 @@ SPEC CHECKSUMS:
   connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
   device_info: cbf09d2ec12aa7110e0b09fabe54b5bd6c8efe74
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_ijk: c830c5dac289a2d11c7a9d93c488fe1ded0125d5
+  flutter_ijk: b9a97d7adfed738f267c10d7429f687a30885508
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
-  image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
+  image_picker: 4202484a5131df029c9f421717b5bc7682e6e088
   orientation: 46fe7528896a5c3e6215366bcb462c182ebfd4e9
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   permission_handler: 67637977b227d62d46bfbf524f335f8568de5a73

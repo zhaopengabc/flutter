@@ -722,6 +722,8 @@ FF_ENABLE_DEPRECATION_WARNINGS
 /* return < 0 if eof */
 static int ffm_read_packet(AVFormatContext *s, AVPacket *pkt)
 {
+
+    printf("ffm_read_packet ........ \n");
     int size;
     FFMContext *ffm = s->priv_data;
     int duration, ret;

@@ -422,11 +422,9 @@ static int ijkmp_prepare_async_l(IjkMediaPlayer *mp)
 int ijkmp_prepare_async(IjkMediaPlayer *mp)
 {
     assert(mp);
-    MPTRACE("++++++ijkmp_prepare_async()\n");
     pthread_mutex_lock(&mp->mutex);
     int retval = ijkmp_prepare_async_l(mp);
     pthread_mutex_unlock(&mp->mutex);
-    MPTRACE("====ijkmp_prepare_async()=%d\n", retval);
     return retval;
 }
 

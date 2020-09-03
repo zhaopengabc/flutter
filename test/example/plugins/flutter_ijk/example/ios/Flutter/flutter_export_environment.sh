@@ -1,8 +1,8 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/zhaopeng/Desktop/Hidoo/decode/decode/flutter/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/zhaopeng/Desktop/nova/APP/plugins/flutter_ijk/example"
-export "FLUTTER_TARGET=/Users/zhaopeng/Desktop/nova/APP/plugins/flutter_ijk/example/lib/main.dart"
+export "FLUTTER_APPLICATION_PATH=/Users/zhaopeng/Desktop/nova/git/flutter/test/example/plugins/flutter_ijk/example"
+export "FLUTTER_TARGET=/Users/zhaopeng/Desktop/nova/git/flutter/test/example/plugins/flutter_ijk/example/lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "SYMROOT=${SOURCE_ROOT}/../build/ios"
 export "OTHER_LDFLAGS=$(inherited) -framework Flutter"

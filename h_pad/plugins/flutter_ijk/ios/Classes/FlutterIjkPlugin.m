@@ -1,7 +1,11 @@
 #import "FlutterIjkPlugin.h"
 #import <IJKMediaFramework/IJKMediaFramework.h>
 #import <libkern/OSAtomic.h>
-//#import <Reachability.h>
+// #import "Reachability.h"
+
+// #import "RealReachability/RealReachability.h"
+// #import "FSMEngine.h"
+// #import "PingHelper.h"
 
 int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.timescale; }
 
@@ -67,7 +71,7 @@ int start_flag = 0;
     [options setFormatOptionValue:@"tcp" forKey:@"rtsp_transport"];
     [options setFormatOptionValue:@"prefer_tcp" forKey:@"rtsp_flags"];
     [options setFormatOptionValue:@"video" forKey:@"allowed_media_types"];
-    [options setFormatOptionIntValue:10*1000*1000 forKey:@"timeout"];
+    [options setFormatOptionIntValue:100*1000*1000 forKey:@"timeout"];
     [options setFormatOptionIntValue:1024 forKey:@"max-buffer-size"];
     [options setPlayerOptionIntValue:1 forKey:@"infbuf"];
     [options setFormatOptionIntValue:100 forKey:@"analyzemaxduration"];
@@ -76,6 +80,8 @@ int start_flag = 0;
     [options setFormatOptionIntValue:1 forKey:@"flush_packets"];
     [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];
     [options setPlayerOptionIntValue:10 forKey:@"framedrop"];
+    [options setPlayerOptionIntValue:1920    forKey:@"videotoolbox-max-frame-width"];
+
     
 
     // IJKFFOptions *options = [IJKFFOptions optionsByDefault];
@@ -92,7 +98,7 @@ int start_flag = 0;
     // [options setFormatOptionIntValue:10240 forKey:@"probesize"];
     // [options setFormatOptionIntValue:1 forKey:@"flush_packets"];
     // [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];  
-    [options setFormatOptionIntValue:1 forKey:@"reconnect"];
+    [options setFormatOptionIntValue:100 forKey:@"reconnect"];
     [options setPlayerOptionIntValue:1 forKey:@"enable-accurate-seek"]; 
     [options setPlayerOptionIntValue:0 forKey:@"skip_loop_filter"]; 
     [options setPlayerOptionValue:@"1" forKey:@"an"];
@@ -102,6 +108,9 @@ int start_flag = 0;
     
     [self removeMovieNotificationObservers];
     [self installMovieNotificationObservers];
+
+    // [IJKFFMoviePlayerController setLogReport:YES];
+    // [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
     
     // [_player setPauseInBackground:NO];
 
@@ -372,6 +381,11 @@ int start_flag = 0;
 @property(readonly, nonatomic) FLTIJKFrameUpdater* frameUpdater;
 @property(readonly, nonatomic) NSString* dataSource;
 @property(readonly, nonatomic) NSObject<FlutterPluginRegistrar>* registrar;
+// - (void)networkChanged:(NSNotification *)notification;
+
+
+// @synthesize remoteHostStatus;
+
 
 @end
 
@@ -384,6 +398,10 @@ int start_flag = 0;
     [registrar addMethodCallDelegate:instance channel:channel];
 }
 
+// - (void)updateStatus {
+//     self.remoteHostStatus = [[Reachability sharedReachability] remoteHostStatus];
+// }
+
 - (instancetype)initWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     self = [super init];
     NSAssert(self, @"super init cannot be nil");
@@ -393,10 +411,16 @@ int start_flag = 0;
     _players = [NSMutableDictionary dictionaryWithCapacity:1];
     return self;
 }
+// - (void)networkChanged:(NSNotification *)notification
+// {
+//     RealReachability *reachability = (RealReachability *)notification.object;
+    
+//     ReachabilityStatus status = [reachability currentReachabilityStatus];
+//     NSLog(@"--------------------------currentStatus:%@",@(status));
+// }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    // printf("_player.myPlaybackState : %d flag : %d stop_flag : %d start_flag : %d\n",_player.myPlaybackState,flag,stop_flag,start_flag);
-
+    
     if((flag == 2) && (_player.myPlaybackState == IJKMPMoviePlaybackStatePlaying))
     {
             [_registry unregisterTexture:0];
@@ -420,7 +444,6 @@ int start_flag = 0;
     }
 
             
-            //   if((_player.myPlaybackState == IJKMPMoviePlaybackStateStopped) && (stop_flag != 0) )
              if(((_player.myPlaybackState == IJKMPMoviePlaybackStateStopped)
               || ((_player.myPlaybackState == IJKMPMoviePlaybackStatePaused) && (start_flag == 0))) && (stop_flag != 0) )
              {
@@ -451,7 +474,6 @@ int start_flag = 0;
         }
         [_players removeAllObjects];
 
-         NSLog(@"init : %@--------",_players);
          result(@(0));
     } else if ([@"startTask" isEqualToString:call.method]) {
             [_registry unregisterTexture:0];
@@ -466,7 +488,20 @@ int start_flag = 0;
                                             frameUpdater:_frameUpdater];
         [_player play];
 
-        result(@(0));
+    //     [GLobalRealReachability startNotifier];
+    //     GLobalRealReachability.hostForPing = @"192.168.100.201";
+    //     [self realNetworkingStatus:status];
+    //     // GLobalRealReachability.hostForPing = _dataSource;
+
+    
+    // [[NSNotificationCenter defaultCenter] addObserver:self
+    //                                          selector:@selector(networkChanged:)
+    //                                              name:kRealReachabilityChangedNotification
+    //                                            object:nil];
+
+//    [self listenNetWorkingStatus];
+
+    result(@(0));
     }
      else if ([@"getImageFrame" isEqualToString:call.method]) {
 
@@ -495,36 +530,14 @@ int start_flag = 0;
             //   result (@'5');
              return;
          }
-        else
-        {
-            // if(flag == 2)
-            // {
-            //         [_registry unregisterTexture:0];
-            //         [_players removeObjectForKey:@(0)];
-            //         [_player dispose];
 
-            //         _frameUpdater = [[FLTIJKFrameUpdater alloc] initWithRegistry:_registry];
-            //          // _dataSource = argsMap[@"url"];
-            //         _player = [[FLTIJKVideoPlayer alloc] initWithURL:[NSURL URLWithString:_dataSource]
-            //                                         frameUpdater:_frameUpdater]; 
-            //     // [_player initWithURL:[NSURL URLWithString:_dataSource] frameUpdater:_frameUpdater];
-
-            //     [_player play];
-
-            //     flag = 0;
-            //     stop_flag = 2;
-
-            //     result(@(0));
-            //     return;
-            // }
-        }
         CVPixelBufferRef pixelBuffer = [_player copyPixelBuffer];
 
          if(pixelBuffer == nil)
          {
-             printf("pixelBuffer : null \n");
+            //  printf("pixelBuffer : null \n");
              CVPixelBufferRelease(pixelBuffer);
-             result(@(6));
+            //  result(@(6));
             return;
          }
         else
@@ -562,45 +575,7 @@ int start_flag = 0;
                 result ? result(imageData) : 7;
                 imageData = nil;
                 image = nil;
-                // return;
-
-                // //Lock the imagebuffer
-                // CVPixelBufferLockBaseAddress(pixelBuffer,0);
-                // size_t width = CVPixelBufferGetWidth(pixelBuffer);
-                // size_t height  = CVPixelBufferGetHeight(pixelBuffer);
-                // // Get information about the image
-                // uint8_t *baseAddress = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
-                // size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
-                // CVPlanarPixelBufferInfo_YCbCrBiPlanar *bufferInfo = (CVPlanarPixelBufferInfo_YCbCrBiPlanar *)baseAddress;
-                // // This just moved the pointer past the offset
-                // baseAddress = (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-                // CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-                // UIImage *image = [NSData makeUIImage:baseAddress bufferInfo:bufferInfo width:width height:height bytesPerRow:bytesPerRow];
-                // // return image;
-            // CGImageRef image;
-            // CVPixelBufferRetain(pixelBuffer);
-
-            // CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-            // void *pxdata = CVPixelBufferGetBaseAddress(pixelBuffer);
-            // NSParameterAssert(pixelBuffer != NULL);
-            // size_t width = CVPixelBufferGetWidth(pixelBuffer);
-            // size_t height = CVPixelBufferGetHeight(pixelBuffer);
-            // CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-
-            // CGContextRef context = CGBitmapContextCreate(pixelBuffer, width,
-            //         height, 8, 4 * width, rgbColorSpace,
-            //         kCGImageAlphaNoneSkipFirst);
-            // NSParameterAssert(context);
-            // CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
-            // CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image),
-            //             CGImageGetHeight(image)), image);
-            // CGColorSpaceRelease(rgbColorSpace);
-            // CGContextRelease(context);
-
-            // CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-            // CVPixelBufferRelease(pixelBuffer);
-            // result ? result(image) : 7;
-                
+                // return;                
         }
     }
     else if([@"stopTask" isEqualToString:call.method]){
@@ -616,6 +591,63 @@ int start_flag = 0;
         // result(FlutterMethodNotImplemented);
     }
 }
+
+/*
+-(void)listenNetWorkingStatus{
+    // GLobalRealReachability.hostForPing = @"192.168.10.2";
+    // GLobalRealReachability.autoCheckInterval = 5.0f;
+
+    [GLobalRealReachability startNotifier];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(networkChanged:)
+                                                 name:kRealReachabilityChangedNotification
+                                               object:nil];
+    ReachabilityStatus status = [GLobalRealReachability currentReachabilityStatus];
+    [self realNetworkingStatus:status];
+}
+
+- (void)networkChanged:(NSNotification *)notification
+{
+    RealReachability *reachability = (RealReachability *)notification.object;
+    ReachabilityStatus status = [reachability currentReachabilityStatus];
+    [self realNetworkingStatus:status];
+}
+
+-(void)realNetworkingStatus:(ReachabilityStatus)status{
+    switch (status)
+    {
+            case RealStatusUnknown:
+        {
+            NSLog(@"~~~~~~~~~~~~~RealStatusUnknown");
+            // self.netStatus = NetStatusUnknown;
+            break;
+        }
+            
+            case RealStatusNotReachable:
+        {
+            NSLog(@"~~~~~~~~~~~~~RealStatusNotReachable");
+            // self.netStatus = NetStatusNotReachable;
+            break;
+        }
+            
+            case RealStatusViaWWAN:
+        {
+            NSLog(@"~~~~~~~~~~~~~RealStatusViaWWAN");
+            // self.netStatus = NetStatusViaWWAN;
+            break;
+        }
+            case RealStatusViaWiFi:
+        {
+            NSLog(@"~~~~~~~~~~~~~RealStatusViaWiFi");
+            // self.netStatus = NetStatusViaWiFi;
+            break;
+        }
+        default:
+        NSLog(@"~~~~~~~~~~~~~...................");
+            break;
+    }
+}
+*/
 
 @end
 

@@ -55,9 +55,9 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
     [options setPlayerOptionIntValue:1 forKey:@"videotoolbox"]; //硬解
-    [options setPlayerOptionIntValue:0 forKey:@"mediacodec-hevc"]; //h265硬解
-    [options setFormatOptionValue:@"tcp" forKey:@"rtsp_transport"];
-    [options setFormatOptionValue:@"prefer_tcp" forKey:@"rtsp_flags"];
+    // [options setPlayerOptionIntValue:0 forKey:@"mediacodec-hevc"]; //h265硬解
+    // [options setFormatOptionValue:@"tcp" forKey:@"rtsp_transport"];
+    // [options setFormatOptionValue:@"prefer_tcp" forKey:@"rtsp_flags"];
     [options setFormatOptionValue:@"video" forKey:@"allowed_media_types"];
     [options setFormatOptionIntValue:10*1000*1000 forKey:@"timeout"];
     [options setFormatOptionIntValue:1024 forKey:@"max-buffer-size"];
@@ -67,11 +67,19 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
     [options setFormatOptionIntValue:1 forKey:@"flush_packets"];
     [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];
     [options setPlayerOptionIntValue:60 forKey:@"framedrop"];
+    [options setPlayerOptionIntValue:1 forKey:@"videotoolbox-handle-resolution-change"];
+    [options setPlayerOptionIntValue:1920    forKey:@"videotoolbox-max-frame-width"];
+
+
     
     _player = [[IJKFFMoviePlayerController alloc] initWithContentURL:url withOptions:options];
     
     [self removeMovieNotificationObservers];
     [self installMovieNotificationObservers];
+
+    [IJKFFMoviePlayerController setLogReport:YES];
+    [IJKFFMoviePlayerController setLogLevel:k_IJK_LOG_DEBUG];
+
 
     if(![_player isPlaying]){
         [_player prepareToPlay];
@@ -270,10 +278,13 @@ int64_t FLTIJKCMTimeToMillis(CMTime time) { return time.value * 1000 / time.time
 }
 
 - (CVPixelBufferRef)copyPixelBuffer {
+    [_player framePixelbufferLock];
     CVPixelBufferRef pixelBuffer = [_player framePixelbuffer];
     if(pixelBuffer != nil){
         CFRetain(pixelBuffer);
     }
+    [_player framePixelbufferUnlock];
+
     return pixelBuffer;
 }
 

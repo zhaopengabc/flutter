@@ -1,7 +1,7 @@
-prefix=/Users/zhaopeng/Desktop/H/decode/flutter_ijkplayer_source/ios/build/ffmpeg-arm64/output
+prefix=/Users/zhaopeng/Desktop/nova/git/flutter/flutter_ijkplayer_source/ios/build/ffmpeg-arm64/output
 exec_prefix=${prefix}
-libdir=/Users/zhaopeng/Desktop/H/decode/flutter_ijkplayer_source/ios/build/ffmpeg-arm64/output/lib
-includedir=/Users/zhaopeng/Desktop/H/decode/flutter_ijkplayer_source/ios/build/ffmpeg-arm64/output/include
+libdir=/Users/zhaopeng/Desktop/nova/git/flutter/flutter_ijkplayer_source/ios/build/ffmpeg-arm64/output/lib
+includedir=/Users/zhaopeng/Desktop/nova/git/flutter/flutter_ijkplayer_source/ios/build/ffmpeg-arm64/output/include
 
 Name: libavformat
 Description: FFmpeg container format library
