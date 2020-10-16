@@ -83,7 +83,6 @@ int ff_network_wait_fd_timeout(int fd, int write, int64_t timeout, AVIOInterrupt
 {
     int ret;
     int64_t wait_start = 0;
-
     while (1) {
         if (ff_check_interrupt(int_cb))
             return AVERROR_EXIT;
@@ -249,7 +248,6 @@ int ff_listen_connect(int fd, const struct sockaddr *addr,
     while ((ret = connect(fd, addr, addrlen))) {
         ret = ff_neterrno();
         switch (ret) {
-            printf("ret");
         case AVERROR(EINTR):
             if (ff_check_interrupt(&h->interrupt_callback))
                 return AVERROR_EXIT;
@@ -271,11 +269,8 @@ int ff_listen_connect(int fd, const struct sockaddr *addr,
                            "Connection to %s failed (%s), trying next address\n",
                            h->filename, errbuf);
                 else
-                {
-                    av_log(h, AV_LOG_ERROR, "zhaopeng ----- Connection to %s failed: %s\n",
+                    av_log(h, AV_LOG_ERROR, "Connection to %s failed: %s\n",
                            h->filename, errbuf);
-                }
-
             }
         default:
             return ret;

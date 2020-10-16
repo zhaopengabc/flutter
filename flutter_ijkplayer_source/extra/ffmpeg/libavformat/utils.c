@@ -1709,7 +1709,6 @@ int av_read_frame(AVFormatContext *s, AVPacket *pkt)
     int eof = 0;
     int ret;
     AVStream *st;
-printf("av_read_frame 0000000000000000000 \n");
 
     if (!genpts) {
         ret = s->internal->packet_buffer
@@ -1722,12 +1721,9 @@ printf("av_read_frame 0000000000000000000 \n");
     }
 
     for (;;) {
-printf("av_read_frame: 1.......... \n");
         AVPacketList *pktl = s->internal->packet_buffer;
 
         if (pktl) {
-printf("av_read_frame: 2.......... \n");
-
             AVPacket *next_pkt = &pktl->pkt;
 
             if (next_pkt->dts != AV_NOPTS_VALUE) {
@@ -1759,7 +1755,6 @@ printf("av_read_frame: 2.......... \n");
                 }
                 pktl = s->internal->packet_buffer;
             }
-printf("av_read_frame: 3.......... \n");
 
             /* read packet from packet buffer, if there is data */
             st = s->streams[next_pkt->stream_index];
@@ -1770,7 +1765,6 @@ printf("av_read_frame: 3.......... \n");
                 goto return_packet;
             }
         }
-printf("av_read_frame: 4.......... \n");
 
         ret = read_frame_internal(s, pkt);
         if (ret < 0) {
@@ -1780,7 +1774,6 @@ printf("av_read_frame: 4.......... \n");
             } else
                 return ret;
         }
-printf("av_read_frame: 5......... \n");
 
         ret = add_to_pktbuf(&s->internal->packet_buffer, pkt,
                             &s->internal->packet_buffer_end, 1);
@@ -1788,7 +1781,6 @@ printf("av_read_frame: 5......... \n");
         if (ret < 0)
             return ret;
     }
-printf("av_read_frame: 6.......... \n");
 
 return_packet:
 

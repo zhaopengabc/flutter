@@ -42,14 +42,14 @@
     [options setPlayerOptionIntValue:1      forKey:@"framedrop"];
     [options setPlayerOptionIntValue:3      forKey:@"video-pictq-size"];
     [options setPlayerOptionIntValue:1      forKey:@"videotoolbox"];
-    [options setPlayerOptionIntValue:1920    forKey:@"videotoolbox-max-frame-width"];
+    [options setPlayerOptionIntValue:960    forKey:@"videotoolbox-max-frame-width"];
     //add for flutter
     [options setPlayerOptionIntValue:1      forKey:@"video-max-frame-width-default"];
     [options setPlayerOptionIntValue:1      forKey:@"videotoolbox-async"];
     //end
 
     [options setFormatOptionIntValue:0                  forKey:@"auto_convert"];
-    [options setFormatOptionIntValue:100                  forKey:@"reconnect"];
+    [options setFormatOptionIntValue:1                  forKey:@"reconnect"];
     [options setFormatOptionIntValue:30 * 1000 * 1000   forKey:@"timeout"];
     [options setFormatOptionValue:@"ijkplayer"          forKey:@"user-agent"];
 

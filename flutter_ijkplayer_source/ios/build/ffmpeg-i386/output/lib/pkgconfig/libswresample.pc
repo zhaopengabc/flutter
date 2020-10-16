@@ -1,7 +1,7 @@
-prefix=/Users/zhaopeng/Desktop/nova/git/flutter/flutter_ijkplayer_source/ios/build/ffmpeg-i386/output
+prefix=/Users/zhaopeng/Desktop/nova/git/bk/flutter_ijkplayer_source/ios/build/ffmpeg-i386/output
 exec_prefix=${prefix}
-libdir=/Users/zhaopeng/Desktop/nova/git/flutter/flutter_ijkplayer_source/ios/build/ffmpeg-i386/output/lib
-includedir=/Users/zhaopeng/Desktop/nova/git/flutter/flutter_ijkplayer_source/ios/build/ffmpeg-i386/output/include
+libdir=/Users/zhaopeng/Desktop/nova/git/bk/flutter_ijkplayer_source/ios/build/ffmpeg-i386/output/lib
+includedir=/Users/zhaopeng/Desktop/nova/git/bk/flutter_ijkplayer_source/ios/build/ffmpeg-i386/output/include
 
 Name: libswresample
 Description: FFmpeg audio resampling library

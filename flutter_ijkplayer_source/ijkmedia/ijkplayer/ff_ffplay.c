@@ -307,6 +307,7 @@ static int packet_queue_get(PacketQueue *q, AVPacket *pkt, int block, int *seria
             ret = -1;
             break;
         }
+
         pkt1 = q->first_pkt;
         if (pkt1) {
             q->first_pkt = pkt1->next;
@@ -330,25 +331,19 @@ static int packet_queue_get(PacketQueue *q, AVPacket *pkt, int block, int *seria
             ret = 0;
             break;
         } else {
-
-         SDL_CondWait(q->cond, q->mutex);
+            SDL_CondWait(q->cond, q->mutex);
         }
     }
     SDL_UnlockMutex(q->mutex);
-
     return ret;
 }
 
 static int packet_queue_get_or_buffering(FFPlayer *ffp, PacketQueue *q, AVPacket *pkt, int *serial, int *finished)
 {
-    int tmp_ret = 0;
     assert(finished);
     if (!ffp->packet_buffering)
-    {
-        
-        tmp_ret = packet_queue_get(q, pkt, 1, serial);
-        return tmp_ret;
-    }
+        return packet_queue_get(q, pkt, 1, serial);
+
     while (1) {
         int new_packet = packet_queue_get(q, pkt, 0, serial);
         if (new_packet < 0)
@@ -681,9 +676,7 @@ static int decoder_decode_frame(FFPlayer *ffp, Decoder *d, AVFrame *frame, AVSub
         if (d->queue->serial == d->pkt_serial) {
             do {
                 if (d->queue->abort_request)
-                {
                     return -1;
-                }
 
                 switch (d->avctx->codec_type) {
                     case AVMEDIA_TYPE_VIDEO:
@@ -742,24 +735,19 @@ static int decoder_decode_frame(FFPlayer *ffp, Decoder *d, AVFrame *frame, AVSub
                     return 1;
             } while (ret != AVERROR(EAGAIN));
         }
+
         do {
             if (d->queue->nb_packets == 0)
-            {
                 SDL_CondSignal(d->empty_queue_cond);
-            }
-            if (d->packet_pending) 
-            {
+            if (d->packet_pending) {
                 av_packet_move_ref(&pkt, &d->pkt);
                 d->packet_pending = 0;
-            }
-            else
-            {
+            } else {
                 if (packet_queue_get_or_buffering(ffp, d->queue, &pkt, &d->pkt_serial, &d->finished) < 0)
-                {
                     return -1;
-                }
             }
         } while (d->queue->serial != d->pkt_serial);
+
         if (pkt.data == flush_pkt.data) {
             avcodec_flush_buffers(d->avctx);
             d->finished = 0;
@@ -1852,10 +1840,7 @@ static int get_video_frame(FFPlayer *ffp, AVFrame *frame)
 
     ffp_video_statistic_l(ffp);
     if ((got_picture = decoder_decode_frame(ffp, &is->viddec, frame, NULL)) < 0)
-    {
         return -1;
-
-    }
 
     if (got_picture) {
         double dpts = NAN;
@@ -2162,10 +2147,7 @@ static int audio_thread(void *arg)
     do {
         ffp_audio_statistic_l(ffp);
         if ((got_frame = decoder_decode_frame(ffp, &is->auddec, frame, NULL)) < 0)
-        {
             goto the_end;
-
-        }
 
         if (got_frame) {
                 tb = (AVRational){1, frame->sample_rate};
@@ -2369,13 +2351,14 @@ static int ffplay_video_thread(void *arg)
 #else
     ffp_notify_msg2(ffp, FFP_MSG_VIDEO_ROTATION_CHANGED, ffp_get_video_rotate_degrees(ffp));
 #endif
+
     if (!frame) {
-        printf("frame : null \n");
 #if CONFIG_AVFILTER
         avfilter_graph_free(&graph);
 #endif
         return AVERROR(ENOMEM);
     }
+
     for (;;) {
         ret = get_video_frame(ffp, frame);
         if (ret < 0)
@@ -2524,9 +2507,7 @@ static int subtitle_thread(void *arg)
             return 0;
 
         if ((got_subtitle = decoder_decode_frame(ffp, &is->subdec, NULL, &sp->sub)) < 0)
-        {
             break;
-        }
 
         pts = 0;
 #ifdef FFP_MERGE
@@ -3269,12 +3250,13 @@ static int read_thread(void *arg)
         av_dict_set(&ffp->format_opts, "scan_all_pmts", "1", AV_DICT_DONT_OVERWRITE);
         scan_all_pmts_set = 1;
     }
-    if (av_stristart(is->filename, "rtsp", NULL) ||
-        av_stristart(is->filename, "rtmp", NULL)) {
+    if (av_stristart(is->filename, "rtmp", NULL) ||
+        av_stristart(is->filename, "rtsp", NULL)) {
         // There is total different meaning for 'timeout' option in rtmp
-        av_log(ffp, AV_LOG_WARNING, "read pthread remove 'timeout' option for rtmp.\n");
+        av_log(ffp, AV_LOG_WARNING, "remove 'timeout' option for rtmp.\n");
         av_dict_set(&ffp->format_opts, "timeout", NULL, 0);
     }
+
     if (ffp->skip_calc_frame_rate) {
         av_dict_set_int(&ic->metadata, "skip-calc-frame-rate", ffp->skip_calc_frame_rate, 0);
         av_dict_set_int(&ffp->format_opts, "skip-calc-frame-rate", ffp->skip_calc_frame_rate, 0);
@@ -3289,6 +3271,7 @@ static int read_thread(void *arg)
         goto fail;
     }
     ffp_notify_msg1(ffp, FFP_MSG_OPEN_INPUT);
+
     if (scan_all_pmts_set)
         av_dict_set(&ffp->format_opts, "scan_all_pmts", NULL, AV_DICT_MATCH_CASE);
 
@@ -3389,6 +3372,7 @@ static int read_thread(void *arg)
                 st_index[type] = i;
 
         // choose first h264
+
         if (type == AVMEDIA_TYPE_VIDEO) {
             enum AVCodecID codec_id = st->codecpar->codec_id;
             video_stream_count++;
@@ -3529,8 +3513,7 @@ static int read_thread(void *arg)
             continue;
         }
 #endif
-        if (is->seek_req) 
-        {
+        if (is->seek_req) {
             int64_t seek_target = is->seek_pos;
             int64_t seek_min    = is->seek_rel > 0 ? seek_target - is->seek_rel + 2: INT64_MIN;
             int64_t seek_max    = is->seek_rel < 0 ? seek_target - is->seek_rel - 2: INT64_MAX;
@@ -3610,7 +3593,6 @@ static int read_thread(void *arg)
             ffp_notify_msg3(ffp, FFP_MSG_SEEK_COMPLETE, (int)fftime_to_milliseconds(seek_target), ret);
             ffp_toggle_buffering(ffp, 1);
         }
-
         if (is->queue_attachments_req) {
             if (is->video_st && (is->video_st->disposition & AV_DISPOSITION_ATTACHED_PIC)) {
                 AVPacket copy = { 0 };
@@ -3621,6 +3603,7 @@ static int read_thread(void *arg)
             }
             is->queue_attachments_req = 0;
         }
+
         /* if the queue are full, no need to read more */
         if (ffp->infinite_buffer<1 && !is->seek_req &&
 #ifdef FFP_MERGE
@@ -3631,8 +3614,7 @@ static int read_thread(void *arg)
             || (   stream_has_enough_packets(is->audio_st, is->audio_stream, &is->audioq, MIN_FRAMES)
                 && stream_has_enough_packets(is->video_st, is->video_stream, &is->videoq, MIN_FRAMES)
                 && stream_has_enough_packets(is->subtitle_st, is->subtitle_stream, &is->subtitleq, MIN_FRAMES)))) {
-            if (!is->eof) 
-            {
+            if (!is->eof) {
                 ffp_toggle_buffering(ffp, 0);
             }
             /* wait 10 ms */
@@ -3731,6 +3713,7 @@ static int read_thread(void *arg)
         } else {
             is->eof = 0;
         }
+
         if (pkt->flags & AV_PKT_FLAG_DISCONTINUITY) {
             if (is->audio_stream >= 0) {
                 packet_queue_put(&is->audioq, &flush_pkt);
@@ -3742,6 +3725,7 @@ static int read_thread(void *arg)
                 packet_queue_put(&is->videoq, &flush_pkt);
             }
         }
+
         /* check if packet is in play range specified by user, then queue, otherwise discard */
         stream_start_time = ic->streams[pkt->stream_index]->start_time;
         pkt_ts = pkt->pts == AV_NOPTS_VALUE ? pkt->dts : pkt->pts;
@@ -3762,11 +3746,13 @@ static int read_thread(void *arg)
         }
 
         ffp_statistic_l(ffp);
+
         if (ffp->ijkmeta_delay_init && !init_ijkmeta &&
                 (ffp->first_video_frame_rendered || !is->video_st) && (ffp->first_audio_frame_rendered || !is->audio_st)) {
             ijkmeta_set_avformat_context_l(ffp->meta, ic);
             init_ijkmeta = 1;
         }
+
         if (ffp->packet_buffering) {
             io_tick_counter = SDL_GetTickHR();
             if ((!ffp->first_video_frame_rendered && is->video_st) || (!ffp->first_audio_frame_rendered && is->audio_st)) {
@@ -3794,7 +3780,7 @@ static int read_thread(void *arg)
         ffp_notify_msg2(ffp, FFP_MSG_ERROR, last_error);
     }
     SDL_DestroyMutex(wait_mutex);
-    return -1;
+    return 0;
 }
 
 static int video_refresh_thread(void *arg);
@@ -4043,7 +4029,6 @@ void ffp_global_init()
     ijkav_register_all();
 
     avformat_network_init();
-
     av_lockmgr_register(lockmgr);
     av_log_set_callback(ffp_log_callback_brief);
 
@@ -4414,8 +4399,8 @@ int ffp_prepare_async_l(FFPlayer *ffp, const char *file_name)
     assert(!ffp->is);
     assert(file_name);
 
-    if (av_stristart(file_name, "rtsp", NULL) ||
-        av_stristart(file_name, "rtmp", NULL)) {
+    if (av_stristart(file_name, "rtmp", NULL) ||
+        av_stristart(file_name, "rtsp", NULL)) {
         // There is total different meaning for 'timeout' option in rtmp
         av_log(ffp, AV_LOG_WARNING, "remove 'timeout' option for rtmp.\n");
         av_dict_set(&ffp->format_opts, "timeout", NULL, 0);
@@ -4461,7 +4446,6 @@ int ffp_prepare_async_l(FFPlayer *ffp, const char *file_name)
 #endif
 
     VideoState *is = stream_open(ffp, file_name, NULL);
-
     if (!is) {
         av_log(NULL, AV_LOG_WARNING, "ffp_prepare_async_l: stream_open failed OOM");
         return EIJK_OUT_OF_MEMORY;

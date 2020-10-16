@@ -75,8 +75,6 @@ static int tcp_open(URLContext *h, const char *uri, int flags)
     char portstr[10];
     s->open_timeout = 5000000;
 
-    printf(" >>>>>>>> tcp open ..... \n");
-
     av_url_split(proto, sizeof(proto), NULL, 0, hostname, sizeof(hostname),
         &port, path, sizeof(path), uri);
     if (strcmp(proto, "tcp"))
@@ -151,23 +149,18 @@ static int tcp_open(URLContext *h, const char *uri, int flags)
         setsockopt (fd, SOL_SOCKET, SO_SNDBUF, &s->send_buffer_size, sizeof (s->send_buffer_size));
     }
 
-    if (s->listen == 2) 
-    {
+    if (s->listen == 2) {
         // multi-client
         if ((ret = ff_listen(fd, cur_ai->ai_addr, cur_ai->ai_addrlen)) < 0)
             goto fail1;
-    }
-    else if (s->listen == 1)
-    {
+    } else if (s->listen == 1) {
         // single client
         if ((ret = ff_listen_bind(fd, cur_ai->ai_addr, cur_ai->ai_addrlen,
                                   s->listen_timeout, h)) < 0)
             goto fail1;
         // Socket descriptor already closed here. Safe to overwrite to client one.
         fd = ret;
-    } 
-    else
-    {
+    } else {
         if ((ret = ff_listen_connect(fd, cur_ai->ai_addr, cur_ai->ai_addrlen,
                                      s->open_timeout / 1000, h, !!cur_ai->ai_next)) < 0) {
 
@@ -222,7 +215,9 @@ static int tcp_read(URLContext *h, uint8_t *buf, int size)
     int ret;
 
     if (!(h->flags & AVIO_FLAG_NONBLOCK)) {
-        ret = ff_network_wait_fd_timeout(s->fd, 0, h->rw_timeout, &h->interrupt_callback);
+        //modify by zhaopeng
+        // ret = ff_network_wait_fd_timeout(s->fd, 0, h->rw_timeout, &h->interrupt_callback);
+        ret = ff_network_wait_fd_timeout(s->fd, 0, 1000, &h->interrupt_callback);
         if (ret)
             return ret;
     }

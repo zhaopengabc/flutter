@@ -43,6 +43,8 @@ inline static Ijk_VideoToolBox *Ijk_VideoToolbox_CreateInternal(int async, FFPla
 
     if (!vtb->opaque) {
         freep((void **)&vtb);
+        NSLog(@"+++++ free vtb");
+
         return NULL;
     }
     return vtb;
